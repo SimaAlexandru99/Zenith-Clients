@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import CustomersTabs from "components/custom/TabsCustomers/CustomersTabs"
 
 export const metadata: Metadata = {
-  title: "Customers- Optima Solutions Services",
+  title: "Customers - Optima Solutions Services",
   description: "Customers page",
 }
 

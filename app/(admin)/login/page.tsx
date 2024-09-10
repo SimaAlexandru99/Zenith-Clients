@@ -2,8 +2,8 @@ import { Metadata } from "next"
 import LoginForm from "components/custom/Login/LoginPageComponent"
 
 export const metadata: Metadata = {
-  title: "Login | Zenith Reporting Zone",
-  description: "Login page for Zenith Reporting Zone",
+  title: "Login - Optima Solutions Services",
+  description: "Login page for Optima Solutions Services",
 }
 
 export default function LoginPage() {
