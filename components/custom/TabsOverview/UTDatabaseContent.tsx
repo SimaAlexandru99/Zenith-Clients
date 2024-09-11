@@ -1,12 +1,23 @@
 "use client"
 
-import { Activity, CreditCard, LucideIcon, Users } from "lucide-react"
+import { CheckCircle, LucideIcon, Users, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
+import { Q5BarChart } from "../Charts/Q5BarChart"
 
 interface GenderData {
   gender: string
   count: number
+}
+
+interface AgencyData {
+  _id: string
+  averageRating: number
+}
+
+interface SurveyData {
+  completeSurveys: number
+  incompleteSurveys: number
 }
 
 interface CardData {
@@ -18,20 +29,36 @@ interface CardData {
 
 export default function UTDatabaseContent() {
   const [genderData, setGenderData] = useState<GenderData[]>([])
+  const [topAgencyData, setTopAgencyData] = useState<AgencyData[]>([])
+  const [bottomAgencyData, setBottomAgencyData] = useState<AgencyData[]>([])
+  const [surveyData, setSurveyData] = useState<SurveyData>({ completeSurveys: 0, incompleteSurveys: 0 })
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchGenderData = async () => {
+    const fetchData = async () => {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`/api/gender-data?db=UT_database`)
-        if (!response.ok) {
-          throw new Error("Failed to fetch UT gender data")
+        const [genderResponse,  surveyResponse] = await Promise.all([
+          fetch(`/api/gender-data?db=UT_database`),
+          fetch(`/api/survey-status?db=UT_database`)
+        ])
+
+        if (!genderResponse.ok || !surveyResponse.ok) {
+          throw new Error("Failed to fetch data")
         }
-        const data: GenderData[] = (await response.json()) as GenderData[]
-        setGenderData(data)
+
+        const genderData: GenderData[] = await genderResponse.json() as GenderData[]
+        console.log("Gender data:", genderData);
+
+        const surveyData: SurveyData = await (surveyResponse.json() as Promise<SurveyData>)
+        console.log("Survey data:", surveyData);
+
+        setGenderData(genderData)
+        setTopAgencyData(topAgencyData)
+        setBottomAgencyData(bottomAgencyData)
+        setSurveyData(surveyData)
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
@@ -39,8 +66,8 @@ export default function UTDatabaseContent() {
       }
     }
 
-    fetchGenderData()
-  }, [])
+    fetchData()
+  }, [bottomAgencyData, topAgencyData])
 
   if (error) {
     return <div>An error occurred: {error}</div>
@@ -51,36 +78,39 @@ export default function UTDatabaseContent() {
 
   const cardData: CardData[] = [
     {
-      title: "Total Masculine Clients",
+      title: "Total Clienți Masculini",
       value: isLoading ? "Loading..." : masculinCount,
       icon: Users,
-      description: "Male clients in UT database",
+      description: "Clienți bărbați în baza de date UT",
     },
     {
-      title: "Total Feminine Clients",
+      title: "Total Clienți Femininini",
       value: isLoading ? "Loading..." : femininCount,
       icon: Users,
-      description: "Female clients in UT database",
+      description: "Clienți femei în baza de date UT",
     },
     {
-      title: "UT Sales",
-      value: "+10,234",
-      icon: CreditCard,
-      description: "+15% from last month",
+      title: "Sondaj Complet",
+      value: isLoading ? "Loading..." : surveyData.completeSurveys,
+      icon: CheckCircle,
+      description: "Număr de sondaje completate",
     },
     {
-      title: "UT Active Now",
-      value: "+423",
-      icon: Activity,
-      description: "+180 since last hour",
+      title: "Sondaj Incomplet",
+      value: isLoading ? "Loading..." : surveyData.incompleteSurveys,
+      icon: XCircle,
+      description: "Număr de sondaje incomplete",
     },
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-      {cardData.map((card, index) => (
-        <DataCard key={index} {...card} />
-      ))}
+    <div className="space-y-8">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        {cardData.map((card, index) => (
+          <DataCard key={index} {...card} />
+        ))}
+      </div>
+      <Q5BarChart />
     </div>
   )
 }
@@ -88,7 +118,7 @@ export default function UTDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

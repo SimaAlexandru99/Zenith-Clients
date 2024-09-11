@@ -14,7 +14,6 @@ export default function CustomersTabs() {
         <TabsTrigger value="UT_database">UT Database</TabsTrigger>
         <TabsTrigger value="CC_database">CC Database</TabsTrigger>
       </TabsList>
-
       <TabsContent value="UT_database">
         <UTCustomersContent />
       </TabsContent>

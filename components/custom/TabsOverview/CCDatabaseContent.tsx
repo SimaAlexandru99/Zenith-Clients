@@ -1,12 +1,22 @@
 "use client"
 
-import { Activity, CreditCard, LucideIcon, Users } from "lucide-react"
+import { CheckCircle, LucideIcon, Users, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
 
 interface GenderData {
   gender: string
   count: number
+}
+
+interface AgencyData {
+  _id: string
+  averageRating: number
+}
+
+interface SurveyData {
+  completeSurveys: number
+  incompleteSurveys: number
 }
 
 interface CardData {
@@ -18,20 +28,31 @@ interface CardData {
 
 export default function CCDatabaseContent() {
   const [genderData, setGenderData] = useState<GenderData[]>([])
+  const [, setAgencyData] = useState<AgencyData[]>([])
+  const [surveyData, setSurveyData] = useState<SurveyData>({ completeSurveys: 0, incompleteSurveys: 0 })
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchGenderData = async () => {
+    const fetchData = async () => {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`/api/gender-data?db=CC_database`)
-        if (!response.ok) {
-          throw new Error("Failed to fetch CC gender data")
+        const [genderResponse, agencyResponse] = await Promise.all([
+          fetch(`/api/gender-data?db=CC_database`),
+          fetch(`/api/survey-status?db=CC_database`)
+        ])
+        
+        if (!genderResponse.ok || !agencyResponse.ok ) {
+          throw new Error("Failed to fetch data")
         }
-        const data: GenderData[] = (await response.json()) as GenderData[]
-        setGenderData(data)
+        
+        const genderData: GenderData[] = await genderResponse.json() as GenderData[]
+        const agencyData: AgencyData[] = await agencyResponse.json() as AgencyData[]
+        
+        setGenderData(genderData)
+        setAgencyData(agencyData)
+        setSurveyData(surveyData)
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
@@ -39,8 +60,8 @@ export default function CCDatabaseContent() {
       }
     }
 
-    fetchGenderData()
-  }, [])
+    fetchData()
+  }, [surveyData])
 
   if (error) {
     return <div>An error occurred: {error}</div>
@@ -51,36 +72,38 @@ export default function CCDatabaseContent() {
 
   const cardData: CardData[] = [
     {
-      title: "Total Masculine Clients",
+      title: "Total Clienți Masculini",
       value: isLoading ? "Loading..." : masculinCount,
       icon: Users,
-      description: "Male clients in CC database",
+      description: "Clienți bărbați în baza de date CC",
     },
     {
-      title: "Total Feminine Clients",
+      title: "Total Clienți Feminini",
       value: isLoading ? "Loading..." : femininCount,
       icon: Users,
-      description: "Female clients in CC database",
+      description: "Clienți femei în baza de date CC",
     },
     {
-      title: "CC Sales",
-      value: "+8,765",
-      icon: CreditCard,
-      description: "+12% from last month",
+      title: "Sondaj Complet",
+      value: isLoading ? "Loading..." : surveyData.completeSurveys,
+      icon: CheckCircle,
+      description: "Număr de sondaje completate",
     },
     {
-      title: "CC Active Now",
-      value: "+321",
-      icon: Activity,
-      description: "+150 since last hour",
+      title: "Sondaj Incomplet",
+      value: isLoading ? "Loading..." : surveyData.incompleteSurveys,
+      icon: XCircle,
+      description: "Număr de sondaje incomplete",
     },
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-      {cardData.map((card, index) => (
-        <DataCard key={index} {...card} />
-      ))}
+    <div className="space-y-8">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        {cardData.map((card, index) => (
+          <DataCard key={index} {...card} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -88,7 +111,7 @@ export default function CCDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

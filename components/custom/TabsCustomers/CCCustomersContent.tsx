@@ -136,10 +136,10 @@ export default function CCCustomersContent() {
                     <TableCell>{customer.Status}</TableCell>
                     <TableCell>
                       <Button size="sm" variant="outline">
-                        View
+                        Vezi detalii
                       </Button>
                       <Button size="sm" variant="destructive" className="ml-2">
-                        Delete
+                        Șterge
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -159,7 +159,7 @@ export default function CCCustomersContent() {
             </Pagination>
           </>
         ) : (
-          <div>No customers found</div>
+          <div>Niciun client gasit</div>
         )}
       </CardContent>
     </Card>
