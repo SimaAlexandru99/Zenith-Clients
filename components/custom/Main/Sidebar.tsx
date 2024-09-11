@@ -36,10 +36,10 @@ export function Sidebar() {
           <nav className="grid items-start gap-2 text-sm font-medium lg:px-2">
             <NavItem href="/" icon={<Home className="size-4" />} label="Tablou de bord" active={pathname === "/"} />
             <NavItem
-              href="/interactions"
+              href="/customers"
               icon={<Users className="size-4" />}
-              label="Interacțiuni"
-              active={pathname === "/interactions"}
+              label="Clienți"
+              active={pathname === "/customers"}
             />
             <NavItem
               href="/reports"

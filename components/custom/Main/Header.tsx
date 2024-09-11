@@ -40,10 +40,10 @@ export const Header = () => {
             {/* Adăugarea NavItems ca în Sidebar */}
             <NavItem href="/" icon={<Home className="size-4" />} label="Tablou de bord" active={pathname === "/"} />
             <NavItem
-              href="/interactions"
+              href="/customers"
               icon={<Users className="size-4" />}
               label="Clienți"
-              active={pathname === "/interactions"}
+              active={pathname === "/customers"}
             />
             <NavItem
               href="/reports"

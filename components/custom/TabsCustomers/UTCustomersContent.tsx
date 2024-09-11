@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"  // Changed this line
 import { useEffect, useState } from "react"
 import { Button } from "components/ui/button"
 import { Card, CardContent } from "components/ui/card"
@@ -21,7 +22,6 @@ interface Customer {
   "Cod agentie": number
   Status: string
 }
-
 interface ApiResponse {
   customers: Customer[]
   total: number
@@ -135,9 +135,11 @@ export default function UTCustomersContent() {
                     <TableCell>{customer["Cod agentie"]}</TableCell>
                     <TableCell>{customer.Status}</TableCell>
                     <TableCell>
-                      <Button size="sm" variant="outline">
-                        Vezi detalii
-                      </Button>
+                      <Link href={`/customers/${customer._id}`}>
+                        <Button size="sm" variant="outline">
+                          Vezi detalii
+                        </Button>
+                      </Link>
                       <Button size="sm" variant="destructive" className="ml-2">
                         Șterge
                       </Button>

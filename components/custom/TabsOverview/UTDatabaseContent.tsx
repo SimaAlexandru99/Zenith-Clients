@@ -3,7 +3,6 @@
 import { CheckCircle, LucideIcon, Users, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
-import { Q5BarChart } from "../Charts/Q5BarChart"
 
 interface GenderData {
   gender: string
@@ -40,7 +39,7 @@ export default function UTDatabaseContent() {
       setIsLoading(true)
       setError(null)
       try {
-        const [genderResponse,  surveyResponse] = await Promise.all([
+        const [genderResponse, surveyResponse] = await Promise.all([
           fetch(`/api/gender-data?db=UT_database`),
           fetch(`/api/survey-status?db=UT_database`)
         ])
@@ -110,7 +109,6 @@ export default function UTDatabaseContent() {
           <DataCard key={index} {...card} />
         ))}
       </div>
-      <Q5BarChart />
     </div>
   )
 }
