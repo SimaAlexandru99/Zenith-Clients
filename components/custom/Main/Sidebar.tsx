@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, FileText, Home, LineChart, Users } from "lucide-react"
+import { Bell, Home, LineChart, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -15,11 +15,11 @@ export function Sidebar() {
 
   return (
     <div className="fixed inset-y-0 left-0 z-30 hidden w-[220px] border-r bg-muted/40 md:block lg:w-[280px]">
-      <div className="flex h-full flex-col">
+      <div className="flex flex-col h-full">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Image src="/logo.png" alt="Logo Optima" width={30} height={30} className="size-6" />
-            <span className="">Soluții Optima</span>
+            <span className="">Optima Team</span>
           </Link>
           <Button variant="outline" size="icon" className="ml-auto size-8">
             <Bell className="size-4" />
@@ -36,12 +36,6 @@ export function Sidebar() {
               active={pathname === "/customers"}
             />
             <NavItem
-              href="/reports"
-              icon={<FileText className="size-4" />}
-              label="Rapoarte"
-              active={pathname === "/reports"}
-            />
-            <NavItem
               href="/analytics"
               icon={<LineChart className="size-4" />}
               label="Analize"
@@ -49,7 +43,7 @@ export function Sidebar() {
             />
           </nav>
         </ScrollArea>
-        <div className="mt-auto border-t p-4">
+        <div className="p-4 mt-auto border-t">
           <Card>
             <CardHeader className="p-2 pt-0 md:p-4">
               <CardTitle>Upgrade la Pro</CardTitle>

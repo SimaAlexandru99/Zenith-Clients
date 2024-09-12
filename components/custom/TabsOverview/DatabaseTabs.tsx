@@ -16,7 +16,7 @@ export default function DatabaseTabs() {
       <div className="space-y-2">
         <Link href="/" className="group inline-flex items-center px-0.5 text-sm font-medium">
           <ChartPie className="size-4" />
-          <Separator className="mx-2 h-4 w-px shrink-0 bg-border" />
+          <Separator className="w-px h-4 mx-2 shrink-0 bg-border" />
           <span className="underline-offset-4 group-hover:underline">
             Află mai multe despre clienții tăi {selectedDb === "UT_database" ? "UT" : "CC"}
           </span>
@@ -33,8 +33,8 @@ export default function DatabaseTabs() {
 
       <Tabs defaultValue="UT_database" onValueChange={setSelectedDb}>
         <TabsList className="grid w-[400px] grid-cols-2 space-x-4">
-          <TabsTrigger value="UT_database">Baza de date UT</TabsTrigger>
-          <TabsTrigger value="CC_database">Baza de date CC</TabsTrigger>
+          <TabsTrigger value="UT_database" aria-label="Select UT Database">Baza de date UT</TabsTrigger>
+          <TabsTrigger value="CC_database" aria-label="Select CC Database">Baza de date CC</TabsTrigger>
         </TabsList>
 
         <TabsContent value="UT_database">
@@ -46,12 +46,12 @@ export default function DatabaseTabs() {
         </TabsContent>
       </Tabs>
 
-      <div className="mt-8 rounded-lg bg-muted p-4">
+      <div className="p-4 mt-8 rounded-lg bg-muted">
         <p className="text-sm text-muted-foreground">
           În cadrul acestei prezentări veți regăsi o analiză cu privire la satisfacția clienților CEC Bank, analiza
           desfășurată în perioada anului 2024 în colaborare cu Optima Solutions Services, în care am analizat
           următoarele aspecte:
-          <ul className="mt-2 list-inside list-disc">
+          <ul className="mt-2 list-disc list-inside">
             <li>studierea și colectarea motivelor pentru care clienții aleg această bancă</li>
             <li>gradul de rezolvare a problemelor pentru care clienții au ales serviciile CEC Bank</li>
             <li>evaluarea interacțiunii pe care clientul a avut-o în cadrul unităților CEC Bank</li>
