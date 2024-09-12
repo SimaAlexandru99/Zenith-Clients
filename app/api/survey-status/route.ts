@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
     const [completeSurveys, incompleteSurveys] = await Promise.all([
       collection.countDocuments({ Status: "Sondaj complet" }),
-      collection.countDocuments({ Status: { $ne: "Sondaj complet" } })
+      collection.countDocuments({ Status: { $ne: "Sondaj complet" } }),
     ])
 
     return NextResponse.json({ completeSurveys, incompleteSurveys })

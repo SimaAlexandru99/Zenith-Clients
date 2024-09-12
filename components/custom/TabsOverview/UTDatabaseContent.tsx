@@ -41,18 +41,18 @@ export default function UTDatabaseContent() {
       try {
         const [genderResponse, surveyResponse] = await Promise.all([
           fetch(`/api/gender-data?db=UT_database`),
-          fetch(`/api/survey-status?db=UT_database`)
+          fetch(`/api/survey-status?db=UT_database`),
         ])
 
         if (!genderResponse.ok || !surveyResponse.ok) {
           throw new Error("Failed to fetch data")
         }
 
-        const genderData: GenderData[] = await genderResponse.json() as GenderData[]
-        console.log("Gender data:", genderData);
+        const genderData: GenderData[] = (await genderResponse.json()) as GenderData[]
+        console.log("Gender data:", genderData)
 
         const surveyData: SurveyData = await (surveyResponse.json() as Promise<SurveyData>)
-        console.log("Survey data:", surveyData);
+        console.log("Survey data:", surveyData)
 
         setGenderData(genderData)
         setTopAgencyData(topAgencyData)
@@ -116,7 +116,7 @@ export default function UTDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

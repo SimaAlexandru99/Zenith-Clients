@@ -40,16 +40,16 @@ export default function CCDatabaseContent() {
       try {
         const [genderResponse, agencyResponse] = await Promise.all([
           fetch(`/api/gender-data?db=CC_database`),
-          fetch(`/api/survey-status?db=CC_database`)
+          fetch(`/api/survey-status?db=CC_database`),
         ])
-        
-        if (!genderResponse.ok || !agencyResponse.ok ) {
+
+        if (!genderResponse.ok || !agencyResponse.ok) {
           throw new Error("Failed to fetch data")
         }
-        
-        const genderData: GenderData[] = await genderResponse.json() as GenderData[]
-        const agencyData: AgencyData[] = await agencyResponse.json() as AgencyData[]
-        
+
+        const genderData: GenderData[] = (await genderResponse.json()) as GenderData[]
+        const agencyData: AgencyData[] = (await agencyResponse.json()) as AgencyData[]
+
         setGenderData(genderData)
         setAgencyData(agencyData)
         setSurveyData(surveyData)
@@ -111,7 +111,7 @@ export default function CCDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

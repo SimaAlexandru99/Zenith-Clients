@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"  // Changed this line
+import Link from "next/link" // Changed this line
 import { useEffect, useState } from "react"
 import { Button } from "components/ui/button"
 import { Card, CardContent } from "components/ui/card"

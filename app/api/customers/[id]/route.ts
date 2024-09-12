@@ -4,10 +4,7 @@ import { env } from "env.mjs"
 
 const uri = env.MONGODB_URI
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const { searchParams } = new URL(request.url)
   const dbName = searchParams.get("db") || "UT_database"
 
@@ -28,8 +25,8 @@ export async function GET(
     const transformedCustomer = {
       ...customer,
       "Talk time": customer["Talk time"] ? new Date(customer["Talk time"]).toLocaleString() : "N/A",
-      "Start_Date": customer["Start_Date"] ? new Date(customer["Start_Date"]).toLocaleString() : "N/A",
-      "End_Date": customer["End_Date"] ? new Date(customer["End_Date"]).toLocaleString() : "N/A",
+      Start_Date: customer["Start_Date"] ? new Date(customer["Start_Date"]).toLocaleString() : "N/A",
+      End_Date: customer["End_Date"] ? new Date(customer["End_Date"]).toLocaleString() : "N/A",
     }
 
     return NextResponse.json(transformedCustomer)

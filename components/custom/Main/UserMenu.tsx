@@ -21,7 +21,7 @@ export const UserMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer size-8">
+        <Avatar className="size-8 cursor-pointer">
           <AvatarImage src={user?.photoURL ?? undefined} alt={user?.displayName ?? "Avatar utilizator"} />
           <AvatarFallback>{user?.email?.[0]?.toUpperCase()}</AvatarFallback>
         </Avatar>
@@ -61,10 +61,7 @@ export const UserMenu = () => {
         <DropdownMenuSeparator />
         <div className="flex items-center justify-between px-2 py-1.5">
           <span className="text-sm">Mod întunecat</span>
-          <Switch
-            checked={theme === "dark"}
-            onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-          />
+          <Switch checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => auth.signOut()}>
