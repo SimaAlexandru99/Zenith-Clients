@@ -78,7 +78,7 @@ export default function CCDatabaseContent() {
       description: "Clienți bărbați în baza de date CC",
     },
     {
-      title: "Total Clienți Feminini",
+      title: "Total Clienți Femini",
       value: isLoading ? "Loading..." : femininCount,
       icon: Users,
       description: "Clienți femei în baza de date CC",

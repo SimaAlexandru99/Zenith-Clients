@@ -15,7 +15,7 @@ export function Sidebar() {
 
   return (
     <div className="fixed inset-y-0 left-0 z-30 hidden w-[220px] border-r bg-muted/40 md:block lg:w-[280px]">
-      <div className="flex flex-col h-full">
+      <div className="flex h-full flex-col">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Image src="/logo.png" alt="Logo Optima" width={30} height={30} className="size-6" />
@@ -43,7 +43,7 @@ export function Sidebar() {
             />
           </nav>
         </ScrollArea>
-        <div className="p-4 mt-auto border-t">
+        <div className="mt-auto border-t p-4">
           <Card>
             <CardHeader className="p-2 pt-0 md:p-4">
               <CardTitle>Upgrade la Pro</CardTitle>

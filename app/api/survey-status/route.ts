@@ -4,6 +4,20 @@ import { env } from "env.mjs"
 
 const uri = env.MONGODB_URI
 
+if (!uri) {
+  throw new Error("MONGODB_URI is not defined in the environment variables")
+}
+
+let client: MongoClient | null = null
+
+async function getClient() {
+  if (!client) {
+    client = new MongoClient(uri)
+    await client.connect()
+  }
+  return client
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const dbName = searchParams.get("db")
@@ -12,10 +26,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Database name is required" }, { status: 400 })
   }
 
-  const client = new MongoClient(uri)
-
   try {
-    await client.connect()
+    const client = await getClient()
     const db = client.db(dbName)
     const collection = db.collection("sc_si_collection")
 
@@ -26,9 +38,18 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ completeSurveys, incompleteSurveys })
   } catch (error) {
-    console.error("Error connecting to database:", error)
+    console.error("Error fetching survey data:", error)
     return NextResponse.json({ error: "Could not fetch data" }, { status: 500 })
-  } finally {
-    await client.close()
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  })
 }
