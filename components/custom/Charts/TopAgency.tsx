@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "components/ui/chart"
 
 interface AgencyData {
-  agency: string // This is the agency code
+  agency: string
   averageQ5: number
 }
 
@@ -12,7 +12,9 @@ interface AgencyPerformanceChartProps {
   data: AgencyData[]
 }
 
-export default function AgencyPerformanceChart({ data }: AgencyPerformanceChartProps) {
+export default function TopAgency({ data }: AgencyPerformanceChartProps) {
+  console.log("TopAgency received data:", data)
+
   const chartConfig = {
     averageQ5: {
       label: "Scor Mediu Q5",
@@ -23,19 +25,16 @@ export default function AgencyPerformanceChart({ data }: AgencyPerformanceChartP
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Performanța celor 7 Agenții din Top</CardTitle>
-        <CardDescription>Scorul Mediu Q5 pentru cele 7 agenții de top</CardDescription>
+        <CardTitle>Top 7 Agenții cu Cea Mai Bună Rezolvare a Solicitărilor</CardTitle>
+        <CardDescription>
+          Agenții cu cel mai ridicat scor mediu pentru rezolvarea completă a situațiilor clienților
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart width={600} height={300} data={data} margin={{ top: 20 }}>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="agency" // `agency` is now treated as a string
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
+            <XAxis dataKey="agency" tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Bar dataKey="averageQ5" fill="var(--color-averageQ5)" radius={8}>
               <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
@@ -45,9 +44,12 @@ export default function AgencyPerformanceChart({ data }: AgencyPerformanceChartP
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Performanța în creștere <TrendingUp className="size-4" />
+          Eficiență maximă în rezolvarea solicitărilor <TrendingUp className="size-4" />
         </div>
-        <div className="leading-none text-muted-foreground">Afișează scorul mediu Q5 pentru cele 7 agenții de top.</div>
+        <div className="leading-none text-muted-foreground">
+          Acest grafic prezintă agențiile cu cele mai mari scoruri medii pentru Q5, indicând o rată ridicată de
+          rezolvare completă a situațiilor clienților.
+        </div>
       </CardFooter>
     </Card>
   )

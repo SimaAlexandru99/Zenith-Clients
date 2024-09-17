@@ -1,6 +1,7 @@
 import { CheckCircle, LucideIcon, Users, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
-import AgencyPerformanceChart from "components/custom/Charts/AgencyPerformanceChart" // Import the new chart component
+import BottomAgency from "components/custom/Charts/BottomAgency" // Import the new chart component
+import TopAgency from "components/custom/Charts/TopAgency" // Import the new chart component
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
 
 interface GenderData {
@@ -48,9 +49,9 @@ export default function UTDatabaseContent() {
           throw new Error("Failed to fetch data")
         }
 
-        const fetchedGenderData: GenderData[] = await genderResponse.json() as GenderData[]
-        const fetchedSurveyData: SurveyData = await surveyResponse.json() as SurveyData
-        const fetchedAgencyData: AgencyData[] = await agencyResponse.json() as AgencyData[]
+        const fetchedGenderData: GenderData[] = (await genderResponse.json()) as GenderData[]
+        const fetchedSurveyData: SurveyData = (await surveyResponse.json()) as SurveyData
+        const fetchedAgencyData: AgencyData[] = (await agencyResponse.json()) as AgencyData[]
 
         setGenderData(fetchedGenderData)
         setSurveyData(fetchedSurveyData)
@@ -99,15 +100,26 @@ export default function UTDatabaseContent() {
     },
   ]
 
-  // Sort the agency data by average Q5 score and take the top 7
-  const sortedAgencyData = [...agencyData].sort((a, b) => b.averageQ5 - a.averageQ5).slice(0, 7)
+  // Filter out null values and sort the remaining data
+  const validAgencyData = agencyData.filter((agency) => agency.averageQ5 !== null)
 
-  // Chart data for the bar chart
+  // Sort for top agencies (highest averageQ5)
+  const topAgencyData = [...validAgencyData]
+    .sort((a, b) => b.averageQ5 - a.averageQ5)
+    .slice(0, 7)
+    .map((agency) => ({
+      agency: agency._id.toString(),
+      averageQ5: agency.averageQ5,
+    }))
 
-  const agencyChartData = sortedAgencyData.map((agency) => ({
-    agency: agency._id, // Use the integer ID directly
-    averageQ5: agency.averageQ5,
-  }))
+  // Sort for bottom agencies (lowest averageQ5)
+  const bottomAgencyData = [...validAgencyData]
+    .sort((a, b) => a.averageQ5 - b.averageQ5)
+    .slice(0, 7)
+    .map((agency) => ({
+      agency: agency._id.toString(),
+      averageQ5: agency.averageQ5,
+    }))
 
   return (
     <div className="space-y-8">
@@ -118,7 +130,8 @@ export default function UTDatabaseContent() {
       </div>
 
       {/* Render the chart component */}
-      <AgencyPerformanceChart data={agencyChartData} />
+      {topAgencyData.length > 0 && <TopAgency data={topAgencyData} />}
+      {bottomAgencyData.length > 0 && <BottomAgency data={bottomAgencyData} />}
     </div>
   )
 }
@@ -126,7 +139,7 @@ export default function UTDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

@@ -68,11 +68,13 @@ export async function GET(request: Request) {
       }
     })
 
-    // Prepare the final response with averageQ5 and agencyCode
-    const result = Object.entries(summaryPerAgency).map(([agencyCode, data]) => ({
-      _id: parseInt(agencyCode), // Ensure the agency code remains an integer
-      averageQ5: data.count > 0 ? data.totalQ5 / data.count : 0,
-    }))
+    // Prepare the final response with averageQ5 and agencyCode, excluding null values
+    const result = Object.entries(summaryPerAgency)
+      .map(([agencyCode, data]) => ({
+        _id: parseInt(agencyCode),
+        averageQ5: data.count > 0 ? data.totalQ5 / data.count : null,
+      }))
+      .filter((item) => item.averageQ5 !== null) // Filter out null values
 
     return NextResponse.json(result)
   } catch (error) {
