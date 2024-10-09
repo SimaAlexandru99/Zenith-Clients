@@ -60,6 +60,7 @@ export default function UTDatabaseContent() {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
         setIsLoading(false)
+        
       }
     }
 
@@ -139,7 +140,7 @@ export default function UTDatabaseContent() {
 function DataCard({ title, value, icon: Icon, description }: CardData) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>

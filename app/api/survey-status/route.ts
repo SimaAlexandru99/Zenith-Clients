@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb"
 import { NextResponse } from "next/server"
 import { env } from "env.mjs"
 
+
 const uri = env.MONGODB_URI
 
 if (!uri) {
@@ -31,10 +32,12 @@ export async function GET(request: Request) {
     const db = client.db(dbName)
     const collection = db.collection("sc_si_collection")
 
-    const [completeSurveys, incompleteSurveys] = await Promise.all([
-      collection.countDocuments({ Status: "Sondaj complet" }),
-      collection.countDocuments({ Status: { $ne: "Sondaj complet" } }),
-    ])
+    // Count surveys where the Status is exactly "Sondaj complet"
+    const completeSurveys = await collection.countDocuments({ Status: "Sondaj complet" })
+
+
+    // Count surveys where the Status is exactly "Sondaj incomplet"
+    const incompleteSurveys = await collection.countDocuments({ Status: "Sondaj incomplet" })
 
     return NextResponse.json({ completeSurveys, incompleteSurveys })
   } catch (error) {
@@ -43,13 +46,3 @@ export async function GET(request: Request) {
   }
 }
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    },
-  })
-}
