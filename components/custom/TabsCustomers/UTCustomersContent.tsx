@@ -13,6 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "components/ui/pagination"
+import { Skeleton } from "components/ui/skeleton" // Import Skeleton for loading states
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table"
 
 interface Customer {
@@ -109,26 +110,47 @@ export default function UTCustomersContent() {
     return items
   }
 
-  if (isLoading) return <div>Loading UT customers...</div>
+  const renderSkeletonRows = () => {
+    return Array.from({ length: itemsPerPage }).map((_, index) => (
+      <TableRow key={index}>
+        <TableCell>
+          <Skeleton className="w-full h-6" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-6" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-6" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-6" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-24 h-6" />
+        </TableCell>
+      </TableRow>
+    ))
+  }
+
   if (error) return <div>Error: {error}</div>
 
   return (
     <Card>
       <CardContent>
-        {customers.length > 0 ? (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID Client</TableHead>
-                  <TableHead>Telefon</TableHead>
-                  <TableHead>Cod agentie</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {customers.map((customer) => (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID Client</TableHead>
+              <TableHead>Telefon</TableHead>
+              <TableHead>Cod agentie</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading
+              ? renderSkeletonRows() // Display skeletons while loading
+              : customers.map((customer) => (
                   <TableRow key={customer._id}>
                     <TableCell>{customer["ID Client"]}</TableCell>
                     <TableCell>{customer.Telefon}</TableCell>
@@ -146,22 +168,21 @@ export default function UTCustomersContent() {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-            <Pagination className="mt-4">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />
-                </PaginationItem>
-                {renderPaginationItems()}
-                <PaginationItem>
-                  <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </>
-        ) : (
-          <div>Niciun client gasit</div>
+          </TableBody>
+        </Table>
+        {!isLoading && customers.length === 0 && <div>Niciun client gasit</div>}
+        {!isLoading && customers.length > 0 && (
+          <Pagination className="mt-4">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} />
+              </PaginationItem>
+              {renderPaginationItems()}
+              <PaginationItem>
+                <PaginationNext onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         )}
       </CardContent>
     </Card>

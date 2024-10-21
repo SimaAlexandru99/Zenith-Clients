@@ -4,10 +4,8 @@ import { Bell, Home, LineChart, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-
 import { NavItem } from "components/custom/Main/NavItem"
 import { Button } from "components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
 import { ScrollArea } from "components/ui/scroll-area"
 
 export function Sidebar() {

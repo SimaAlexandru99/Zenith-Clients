@@ -37,7 +37,13 @@ export default function BottomAgency({ data }: AgencyPerformanceChartProps) {
             <XAxis dataKey="agency" tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Bar dataKey="averageQ5" fill="var(--color-averageQ5)" radius={8}>
-              <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+                formatter={(value: number) => value.toFixed(2)} // Format to 2 decimals
+              />
             </Bar>
           </BarChart>
         </ChartContainer>

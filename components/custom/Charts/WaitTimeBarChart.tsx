@@ -1,9 +1,19 @@
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { TrendingUp } from "lucide-react"
 import * as React from "react"
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Button } from "components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "components/ui/chart"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover"
 import { Skeleton } from "components/ui/skeleton"
 
 interface WaitTimeData {
@@ -24,16 +34,24 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function WaitTimeBarChart({ data, isLoading, dbName }: WaitTimeBarChartProps) {
+// Memoizing the entire component
+export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
+  data,
+  isLoading,
+  dbName,
+}: WaitTimeBarChartProps) {
   const [selectedCodAgentie, setSelectedCodAgentie] = React.useState<number | "all">("all")
+  const [open, setOpen] = React.useState(false)
 
-  const formatRating = (rating: string | number) => {
+  // Memoize the function to format ratings
+  const formatRating = React.useCallback((rating: string | number) => {
     if (typeof rating === "number" || (typeof rating === "string" && !isNaN(Number(rating)))) {
       return `Nota ${rating}`
     }
     return rating
-  }
+  }, [])
 
+  // Memoizing the chart data to avoid recalculations
   const chartData = React.useMemo(() => {
     const aggregatedData =
       selectedCodAgentie === "all"
@@ -67,6 +85,7 @@ export function WaitTimeBarChart({ data, isLoading, dbName }: WaitTimeBarChartPr
     }))
   }, [data, selectedCodAgentie])
 
+  // Memoize the sorting of chart data
   const sortedData = React.useMemo(() => {
     return [...chartData].sort((a, b) => {
       if (typeof a.rating === "number" && typeof b.rating === "number") {
@@ -75,11 +94,15 @@ export function WaitTimeBarChart({ data, isLoading, dbName }: WaitTimeBarChartPr
       if (typeof a.rating === "string" && typeof b.rating === "string") {
         return a.rating.localeCompare(b.rating)
       }
-      return 0 // Menține ordinea originală pentru tipuri mixte
+      return 0 // Maintain original order for mixed types
     })
   }, [chartData])
 
-  const uniqueCodAgentie = Array.from(new Set(data.map((item) => item.codAgentie)))
+  // Memoize the unique codAgentie values to avoid recalculation
+  const uniqueCodAgentie = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.codAgentie))),
+    [data]
+  )
 
   return (
     <Card>
@@ -89,27 +112,65 @@ export function WaitTimeBarChart({ data, isLoading, dbName }: WaitTimeBarChartPr
             <CardTitle>Timp de Așteptare în Agenție</CardTitle>
             <CardDescription>{dbName}</CardDescription>
           </div>
-          <Select
-            value={selectedCodAgentie.toString()}
-            onValueChange={(value) => setSelectedCodAgentie(value === "all" ? "all" : parseInt(value))}
-          >
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Toate agențiile" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Toate agențiile</SelectItem>
-              {uniqueCodAgentie.map((cod) => (
-                <SelectItem key={cod} value={cod.toString()}>
-                  Agenția {cod}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+
+          {/* Custom Combobox */}
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between"
+              >
+                {selectedCodAgentie === "all"
+                  ? "Toate agențiile"
+                  : `Agenția ${selectedCodAgentie}`}
+                <CaretSortIcon className="ml-2 opacity-50 size-4 shrink-0" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput placeholder="Search agenție..." className="h-9" />
+                <CommandList>
+                  <CommandEmpty>Nicio agenție găsită.</CommandEmpty>
+                  <CommandGroup>
+                    <CommandItem
+                      value="all"
+                      onSelect={() => {
+                        setSelectedCodAgentie("all")
+                        setOpen(false)
+                      }}
+                    >
+                      Toate agențiile
+                      <CheckIcon
+                        className={selectedCodAgentie === "all" ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"}
+                      />
+                    </CommandItem>
+                    {uniqueCodAgentie.map((cod) => (
+                      <CommandItem
+                        key={cod}
+                        value={cod.toString()}
+                        onSelect={() => {
+                          setSelectedCodAgentie(cod)
+                          setOpen(false)
+                        }}
+                      >
+                        Agenția {cod}
+                        <CheckIcon
+                          className={selectedCodAgentie === cod ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex size-full items-center justify-center">
+          <div className="flex items-center justify-center size-full">
             <Skeleton className="h-[200px] w-full" />
           </div>
         ) : (
@@ -146,4 +207,4 @@ export function WaitTimeBarChart({ data, isLoading, dbName }: WaitTimeBarChartPr
       </CardFooter>
     </Card>
   )
-}
+})
