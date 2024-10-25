@@ -1,10 +1,12 @@
 import { CheckCircle, Users, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import BottomAgency from "components/custom/Charts/BottomAgency";
+import Q4_3AnalysisChart from "components/custom/Charts/Q4_3AnalysisChart";
 import TopAgency from "components/custom/Charts/TopAgency";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Skeleton } from "components/ui/skeleton";
-import { useToast } from "hooks/use-toast"; // Use for toast notifications
+import { useToast } from "hooks/use-toast";
+import Q4_4AnalysisChart from "../Charts/Q4_4AnalysisChart";
 
 interface GenderData {
   gender: string;
@@ -22,6 +24,20 @@ interface SurveyData {
   incompleteSurveys: number;
 }
 
+interface Q4_3Data {
+  campania: string;
+  averageQ4_3: number | null;
+  specialCases: (string | null)[];
+  totalResponses: number;
+}
+
+
+interface Q4_4Data {
+  campania: string;
+  averageQ4_4: number | null;
+  specialCases: (string | null)[];
+  totalResponses: number;
+}
 interface CardData {
   title: string;
   value: string | number;
@@ -35,34 +51,39 @@ export default function UTDatabaseContent() {
   const [genderData, setGenderData] = useState<GenderData[]>([]);
   const [agencyData, setAgencyData] = useState<AgencyData[]>([]);
   const [surveyData, setSurveyData] = useState<SurveyData>({ completeSurveys: 0, incompleteSurveys: 0 });
+  const [q4_3Data, setQ4_3Data] = useState<Q4_3Data[]>([]);
+  const [q4_4Data, setQ4_4Data] = useState<Q4_4Data[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast(); // Initialize toast for notifications
+  const { toast } = useToast();
 
-  // Function to fetch data
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const [genderResponse, surveyResponse, agencyResponse] = await Promise.all([
+      const [genderResponse, surveyResponse, agencyResponse, q4_3Response, q4_4Response] = await Promise.all([
         fetch(`/api/gender-data?db=UT_database`),
         fetch(`/api/survey-status?db=UT_database`),
         fetch(`/api/agency-performance?db=UT_database`),
+        fetch(`/api/q4_3-analysis?db=UT_database`),
+        fetch(`/api/q4_4-analysis?db=UT_database`),
       ]);
 
-      if (!genderResponse.ok || !surveyResponse.ok || !agencyResponse.ok) {
+      if (!genderResponse.ok || !surveyResponse.ok || !agencyResponse.ok || !q4_3Response.ok || !q4_4Response.ok) {
         throw new Error("Failed to fetch data");
       }
 
-      const fetchedGenderData: GenderData[] = (await genderResponse.json()) as GenderData[];
-      const fetchedSurveyData: SurveyData = (await surveyResponse.json()) as SurveyData;
-      const fetchedAgencyData: AgencyData[] = (await agencyResponse.json()) as AgencyData[];
-
+      const fetchedGenderData: GenderData[] = await genderResponse.json() as GenderData[];
+      const fetchedSurveyData: SurveyData = await surveyResponse.json() as SurveyData;
+      const fetchedAgencyData: AgencyData[] = await agencyResponse.json() as AgencyData[];
+      const fetchedQ4_3Data: Q4_3Data[] = await q4_3Response.json() as Q4_3Data[];
+      const fetchedQ4_4Data: Q4_4Data[] = await q4_4Response.json() as Q4_4Data[];
+      setQ4_4Data(fetchedQ4_4Data);
       setGenderData(fetchedGenderData);
       setSurveyData(fetchedSurveyData);
       setAgencyData(fetchedAgencyData);
+      setQ4_3Data(fetchedQ4_3Data);
 
-      // Show success toast
       toast({
         title: "Data loaded successfully",
         description: "The latest data has been fetched from the server.",
@@ -81,17 +102,11 @@ export default function UTDatabaseContent() {
     }
   }, [toast]);
 
-  // Polling mechanism to re-fetch data every few minutes
   useEffect(() => {
-    // Initial data fetch
     fetchData();
-
-    // Set up polling interval
     const intervalId = setInterval(() => {
-      fetchData(); // Fetch data at regular intervals
+      fetchData();
     }, POLLING_INTERVAL);
-
-    // Clear interval on component unmount
     return () => clearInterval(intervalId);
   }, [fetchData]);
 
@@ -157,6 +172,12 @@ export default function UTDatabaseContent() {
 
       {topAgencyData.length > 0 && <TopAgency data={topAgencyData} />}
       {bottomAgencyData.length > 0 && <BottomAgency data={bottomAgencyData} />}
+
+      {/* Place Q4.3 and Q4.4 Charts Side by Side */}
+      <div className="grid gap-8 lg:grid-cols-2">
+        {q4_3Data.length > 0 && <Q4_3AnalysisChart q4_3Data={q4_3Data} />}
+        {q4_4Data.length > 0 && <Q4_4AnalysisChart q4_4Data={q4_4Data} />}
+      </div>
     </div>
   );
 }
