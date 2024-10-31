@@ -16,7 +16,6 @@ export async function GET(request: Request) {
 
     try {
         await client.connect();
-        console.log("Connected successfully to MongoDB");
 
         const db = client.db(dbName);
         const collection = db.collection("sc_si_collection");
@@ -106,6 +105,5 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Failed to fetch Q4.3 data" }, { status: 500 });
     } finally {
         await client.close();
-        console.log("MongoDB connection closed");
     }
 }

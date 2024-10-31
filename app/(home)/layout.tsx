@@ -1,7 +1,11 @@
+// RootLayout.tsx
+
 import { Nunito as FontSans } from "next/font/google"
+import { AppSidebar } from "components/app-sidebar"
 import { AuthWrapper } from "components/custom/Main/AuthWrapper"
-import { Header } from "components/custom/Main/Header"
-import { Sidebar } from "components/custom/Main/Sidebar"
+import Header from "components/Header"
+import MainContent from "components/MainContent"
+import { SidebarProvider } from "components/ui/sidebar"
 import { cn } from "lib/utils"
 import { ThemeProvider } from "providers/ThemeProvider"
 
@@ -20,11 +24,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <AuthWrapper>
-            <Sidebar />
-            <main className="md:pl-[220px] lg:pl-[280px]">
-              <Header />
-              {children}
-            </main>
+            <SidebarProvider>
+              <AppSidebar />
+              <div>
+                <Header />
+                <MainContent>{children}</MainContent>
+              </div>
+            </SidebarProvider>
           </AuthWrapper>
         </ThemeProvider>
       </body>

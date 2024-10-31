@@ -1,12 +1,13 @@
 import { CheckCircle, Users, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import BottomAgency from "components/custom/Charts/BottomAgency";
-import Q4_3AnalysisChart from "components/custom/Charts/Q4_3AnalysisChart";
 import TopAgency from "components/custom/Charts/TopAgency";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Skeleton } from "components/ui/skeleton";
 import { useToast } from "hooks/use-toast";
-import Q4_4AnalysisChart from "../Charts/Q4_4AnalysisChart";
+import Q43AnalysisChart from "../Charts/Q43AnalysisChart";
+import Q44AnalysisChart from "../Charts/Q44AnalysisChart";
+
 
 interface GenderData {
   gender: string;
@@ -31,13 +32,13 @@ interface Q4_3Data {
   totalResponses: number;
 }
 
-
 interface Q4_4Data {
   campania: string;
   averageQ4_4: number | null;
   specialCases: (string | null)[];
   totalResponses: number;
 }
+
 interface CardData {
   title: string;
   value: string | number;
@@ -78,11 +79,12 @@ export default function UTDatabaseContent() {
       const fetchedAgencyData: AgencyData[] = await agencyResponse.json() as AgencyData[];
       const fetchedQ4_3Data: Q4_3Data[] = await q4_3Response.json() as Q4_3Data[];
       const fetchedQ4_4Data: Q4_4Data[] = await q4_4Response.json() as Q4_4Data[];
-      setQ4_4Data(fetchedQ4_4Data);
+
       setGenderData(fetchedGenderData);
       setSurveyData(fetchedSurveyData);
       setAgencyData(fetchedAgencyData);
       setQ4_3Data(fetchedQ4_3Data);
+      setQ4_4Data(fetchedQ4_4Data);
 
       toast({
         title: "Data loaded successfully",
@@ -173,10 +175,26 @@ export default function UTDatabaseContent() {
       {topAgencyData.length > 0 && <TopAgency data={topAgencyData} />}
       {bottomAgencyData.length > 0 && <BottomAgency data={bottomAgencyData} />}
 
-      {/* Place Q4.3 and Q4.4 Charts Side by Side */}
+      {/* Q4.3 and Q4.4 Charts Side by Side */}
       <div className="grid gap-8 lg:grid-cols-2">
-        {q4_3Data.length > 0 && <Q4_3AnalysisChart q4_3Data={q4_3Data} />}
-        {q4_4Data.length > 0 && <Q4_4AnalysisChart q4_4Data={q4_4Data} />}
+      {q4_3Data.length > 0 && (
+        <Q43AnalysisChart
+          q43Data={q4_3Data.map(({ campania, averageQ4_3, totalResponses }) => ({
+            campania,
+            averageQ43: averageQ4_3,
+            totalResponses,
+          }))}
+        />
+      )}
+      {q4_4Data.length > 0 && (
+        <Q44AnalysisChart
+          q44Data={q4_4Data.map(({ campania, averageQ4_4, totalResponses }) => ({
+            campania,
+            averageQ44: averageQ4_4,
+            totalResponses,
+          }))}
+        />
+      )}
       </div>
     </div>
   );

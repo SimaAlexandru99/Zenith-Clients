@@ -13,7 +13,6 @@ interface AgencyPerformanceChartProps {
 }
 
 export default function BottomAgency({ data }: AgencyPerformanceChartProps) {
-  console.log("BottomAgency received data:", data)
 
   const chartConfig = {
     averageQ5: {
