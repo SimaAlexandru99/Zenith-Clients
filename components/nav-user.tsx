@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  ChevronsUpDown,
-  CircleUserRound,
-  LogOut,
-} from "lucide-react"
+import { ChevronsUpDown, CircleUserRound, LogOut } from "lucide-react"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
 import {
@@ -15,12 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "components/ui/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "components/ui/sidebar"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar"
 import { auth } from "lib/firebase"
 
 export function NavUser({ user }: { user: { name: string; email: string; avatar: string } }) {
@@ -48,7 +39,6 @@ export function NavUser({ user }: { user: { name: string; email: string; avatar:
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="rounded-lg size-8">
-                <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-sm leading-tight text-left">

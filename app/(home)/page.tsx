@@ -1,13 +1,7 @@
-import { Metadata } from "next"
-import DatabaseTabs from "components/custom/TabsOverview/DatabaseTabs"
+import { redirect } from "next/navigation"
 
-export const metadata: Metadata = {
-  title: "Panou de control - Optima Solutions Services",
-  description: "Panou de control Optima Solutions Services",
-}
+
 
 export default function Home() {
-  return (
-    <DatabaseTabs />
-  )
+  redirect("/panou-de-control")
 }

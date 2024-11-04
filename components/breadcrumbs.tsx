@@ -1,5 +1,8 @@
-// Header.tsx
-'use client'
+// components/Breadcrumbs.tsx
+"use client"
+
+import { usePathname } from "next/navigation" // Change useRouter to usePathname
+import * as React from "react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,13 +10,9 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "components/ui/breadcrumb"
-import { Separator } from "components/ui/separator"
-import { SidebarTrigger } from "components/ui/sidebar"
-import { usePathname } from "next/navigation"
-import * as React from "react"
 
-export default function Header() {
-  const pathname = usePathname()
+export function Breadcrumbs() {
+  const pathname = usePathname() // use usePathname instead of useRouter
   const pathSegments = pathname?.split("/").filter(Boolean) || []
 
   // Generate breadcrumb items based on path segments
@@ -32,14 +31,8 @@ export default function Header() {
   })
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="h-4 mr-2" />
-        <Breadcrumb>
-          <BreadcrumbList>{breadcrumbs}</BreadcrumbList>
-        </Breadcrumb>
-      </div>
-    </header>
+    <Breadcrumb>
+      <BreadcrumbList>{breadcrumbs}</BreadcrumbList>
+    </Breadcrumb>
   )
 }

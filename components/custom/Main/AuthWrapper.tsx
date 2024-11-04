@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 
 import { LoadingComponent } from "components/custom/Main/Loading"
@@ -12,19 +12,19 @@ export const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
   const pathname = usePathname()
 
+  // Check if the user is not authenticated and not on the login page
+  const shouldRedirectToLogin = useMemo(() => !loading && !user && pathname !== "/login", [loading, user, pathname])
+
   useEffect(() => {
-    if (!loading && !user && pathname !== "/login") {
+    if (shouldRedirectToLogin) {
       router.push("/login")
     }
-  }, [user, loading, router, pathname])
+  }, [shouldRedirectToLogin, router])
 
-  if (loading) {
-    return <LoadingComponent />
-  }
+  if (loading) return <LoadingComponent />
 
-  if (!user && pathname !== "/login") {
-    return null // This prevents a flash of unwanted content
-  }
+  // Prevent rendering of children on non-authenticated routes except "/login"
+  if (shouldRedirectToLogin) return null
 
   return <>{children}</>
 }

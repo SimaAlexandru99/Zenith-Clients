@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
             <p>
               Acesta este dashboard-ul de control unde poți accesa analize și rapoarte legate de controlul clienților.
             </p>
-            <Link href="/analytics/cc-dashboard">
+            <Link href="/analitice/cc-dashboard">
               <Button className="mt-4">Accesează CC Dashboard</Button>
             </Link>
           </CardContent>
@@ -40,7 +40,7 @@ export default function AnalyticsPage() {
               Acesta este dashboard-ul pentru urmărirea utilizatorilor, unde poți accesa analize detaliate și monitoriza
               comportamentul utilizatorilor.
             </p>
-            <Link href="/analytics/ut-dashboard">
+            <Link href="/analitice/ut-dashboard">
               <Button className="mt-4">Accesează UT Dashboard</Button>
             </Link>
           </CardContent>

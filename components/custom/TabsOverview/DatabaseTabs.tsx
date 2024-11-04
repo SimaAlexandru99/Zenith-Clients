@@ -17,7 +17,7 @@ export default function DatabaseTabs() {
       <div className="space-y-4">
         {/* Navigation link */}
         <Link
-          href="/"
+          href="/panou-de-control"
           className="inline-flex items-center text-sm font-medium transition group text-muted-foreground hover:text-foreground"
           aria-label="Go back to homepage"
         >

@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const customer = await collection.findOne({ _id: new ObjectId(params.id) })
 
     if (!customer) {
-      return NextResponse.json({ error: "Customer not found" }, { status: 404 })
+      return NextResponse.json({ error: "Clientul nu a fost găsit" }, { status: 404 })
     }
 
     // Transform the data to handle null values and format dates

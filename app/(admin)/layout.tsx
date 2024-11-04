@@ -24,7 +24,6 @@ export default function AdminRootLayout({ children }: { children: React.ReactNod
               {children}
               <Toaster />
             </main>
-
           </AuthWrapper>
         </ThemeProvider>
       </body>
