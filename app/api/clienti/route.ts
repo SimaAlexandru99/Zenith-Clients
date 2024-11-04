@@ -1,8 +1,8 @@
 // app/api/customers/route.ts
 
+import { env } from "env.mjs"
 import { MongoClient } from "mongodb"
 import { NextResponse } from "next/server"
-import { env } from "env.mjs"
 
 const client = new MongoClient(env.MONGODB_URI)
 let clientPromise = client.connect()

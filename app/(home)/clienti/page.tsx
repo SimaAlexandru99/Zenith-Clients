@@ -7,7 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function Customers() {
-  return (
-    <CustomersTabs />
-  )
+  return <CustomersTabs />
 }

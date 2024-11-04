@@ -1,12 +1,5 @@
 import { Metadata } from "next"
 import { UTDashboard } from "components/custom/UTDashboard"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "components/ui/breadcrumb"
 
 export const metadata: Metadata = {
   title: "UT Dashboard",

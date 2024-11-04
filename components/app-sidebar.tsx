@@ -1,20 +1,11 @@
 "use client"
 
-import {
-  Command,
-  Home,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-  Users,
-} from "lucide-react"
+import { Command, Home, Map, PieChart, SquareTerminal, Users } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 
 import { NavMain } from "components/nav-main"
-import { NavSecondary } from "components/nav-secondary"
 import { NavUser } from "components/nav-user"
 import {
   Sidebar,
@@ -67,7 +58,6 @@ const data = {
   ],
 }
 
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [user] = useAuthState(auth)
   return (
@@ -77,12 +67,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="#">
-                <div className="flex items-center justify-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
-                <div className="grid flex-1 text-sm leading-tight text-left">
-                  <span className="font-semibold truncate">Optima Solutions Services</span>
-                  <span className="text-xs truncate">Analitice</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Optima Solutions Services</span>
+                  <span className="truncate text-xs">Analitice</span>
                 </div>
               </Link>
             </SidebarMenuButton>

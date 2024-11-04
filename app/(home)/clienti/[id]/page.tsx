@@ -1,11 +1,11 @@
 // app/(home)/clienti/[id]/page.tsx
 
+import { env } from "env.mjs" // Asigură-te că env.mjs exportă corect variabilele
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { env } from "env.mjs" // Asigură-te că env.mjs exportă corect variabilele
-import { Customer } from "types/customer" // Importă interfața Customer corect
 import CustomerDetails from "components/custom/TabsCustomers/CustomerDetails" // Importă componenta CustomerDetails
+import { Customer } from "types/customer" // Importă interfața Customer corect
 
 interface CustomerPageProps {
   params: {
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: CustomerPageProps): Promise<M
 
 async function fetchCustomer(id: string): Promise<Customer | null> {
   try {
-    const apiUrl = env.NEXT_PUBLIC_API_URL || ''
+    const apiUrl = env.NEXT_PUBLIC_API_URL || ""
     // Dacă NEXT_PUBLIC_API_URL este definit, folosește-l; altfel, folosește URL-ul relativ
     const url = apiUrl ? `${apiUrl}/api/clienti/${id}?db=UT_database` : `/api/clienti/${id}?db=UT_database`
     const res = await fetch(url, {

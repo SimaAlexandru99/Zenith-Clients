@@ -1,7 +1,7 @@
 // app/api/gender-data/route.ts
+import { env } from "env.mjs"
 import { MongoClient } from "mongodb"
 import { NextResponse } from "next/server"
-import { env } from "env.mjs"
 
 // Singleton pattern for MongoDB connection
 let client: MongoClient | null = null

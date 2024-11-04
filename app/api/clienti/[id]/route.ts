@@ -1,6 +1,6 @@
+import { env } from "env.mjs"
 import { MongoClient, ObjectId } from "mongodb"
 import { NextResponse } from "next/server"
-import { env } from "env.mjs"
 
 const uri = env.MONGODB_URI
 

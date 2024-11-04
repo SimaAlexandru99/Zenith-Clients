@@ -1,7 +1,6 @@
+import { env } from "env.mjs"
 import { MongoClient } from "mongodb"
 import { NextResponse } from "next/server"
-import { env } from "env.mjs"
-
 
 const uri = env.MONGODB_URI
 
@@ -35,7 +34,6 @@ export async function GET(request: Request) {
     // Count surveys where the Status is exactly "Sondaj complet"
     const completeSurveys = await collection.countDocuments({ Status: "Sondaj complet" })
 
-
     // Count surveys where the Status is exactly "Sondaj incomplet"
     const incompleteSurveys = await collection.countDocuments({ Status: "Sondaj incomplet" })
 
@@ -45,4 +43,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Could not fetch data" }, { status: 500 })
   }
 }
-

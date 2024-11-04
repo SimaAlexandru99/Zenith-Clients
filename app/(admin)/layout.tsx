@@ -4,7 +4,6 @@ import { Toaster } from "components/ui/toaster"
 import { cn } from "lib/utils"
 import { ThemeProvider } from "providers/ThemeProvider"
 
-
 import "styles/tailwind.css"
 import "styles/globals.css"
 
@@ -18,7 +17,7 @@ export default function AdminRootLayout({ children }: { children: React.ReactNod
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-        <ThemeProvider attribute="class" defaultTheme="system" >
+        <ThemeProvider attribute="class" defaultTheme="system">
           <AuthWrapper>
             <main>
               {children}

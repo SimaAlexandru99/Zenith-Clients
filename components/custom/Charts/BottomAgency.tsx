@@ -13,7 +13,6 @@ interface AgencyPerformanceChartProps {
 }
 
 export default function BottomAgency({ data }: AgencyPerformanceChartProps) {
-
   const chartConfig = {
     averageQ5: {
       label: "Scor Mediu Q5",

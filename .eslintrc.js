@@ -3,12 +3,12 @@ const fs = require("fs")
 
 module.exports = {
   extends: [
-    "next",
     "prettier",
     "react-app",
     "react-app/jest",
     "plugin:storybook/recommended",
     "plugin:tailwindcss/recommended",
+    "plugin:@next/next/recommended",
   ],
   parserOptions: {
     babelOptions: {

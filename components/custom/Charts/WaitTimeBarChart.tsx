@@ -5,14 +5,7 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, XAxis, YAxis }
 import { Button } from "components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "components/ui/chart"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "components/ui/command"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover"
 import { Skeleton } from "components/ui/skeleton"
 
@@ -99,10 +92,7 @@ export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
   }, [chartData])
 
   // Memoize the unique codAgentie values to avoid recalculation
-  const uniqueCodAgentie = React.useMemo(
-    () => Array.from(new Set(data.map((item) => item.codAgentie))),
-    [data]
-  )
+  const uniqueCodAgentie = React.useMemo(() => Array.from(new Set(data.map((item) => item.codAgentie))), [data])
 
   return (
     <Card>
@@ -116,16 +106,9 @@ export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
           {/* Custom Combobox */}
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="w-[200px] justify-between"
-              >
-                {selectedCodAgentie === "all"
-                  ? "Toate agențiile"
-                  : `Agenția ${selectedCodAgentie}`}
-                <CaretSortIcon className="ml-2 opacity-50 size-4 shrink-0" />
+              <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
+                {selectedCodAgentie === "all" ? "Toate agențiile" : `Agenția ${selectedCodAgentie}`}
+                <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
@@ -143,7 +126,9 @@ export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
                     >
                       Toate agențiile
                       <CheckIcon
-                        className={selectedCodAgentie === "all" ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"}
+                        className={
+                          selectedCodAgentie === "all" ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"
+                        }
                       />
                     </CommandItem>
                     {uniqueCodAgentie.map((cod) => (
@@ -157,7 +142,9 @@ export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
                       >
                         Agenția {cod}
                         <CheckIcon
-                          className={selectedCodAgentie === cod ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"}
+                          className={
+                            selectedCodAgentie === cod ? "ml-auto size-4 opacity-100" : "ml-auto size-4 opacity-0"
+                          }
                         />
                       </CommandItem>
                     ))}
@@ -170,7 +157,7 @@ export const WaitTimeBarChart = React.memo(function WaitTimeBarChart({
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex items-center justify-center size-full">
+          <div className="flex size-full items-center justify-center">
             <Skeleton className="h-[200px] w-full" />
           </div>
         ) : (

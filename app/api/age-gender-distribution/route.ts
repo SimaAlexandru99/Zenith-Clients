@@ -1,7 +1,7 @@
 // app/api/age-gender-distribution/route.ts
+import { env } from "env.mjs"
 import { MongoClient } from "mongodb"
 import { NextResponse } from "next/server"
-import { env } from "env.mjs"
 
 const uri = env.MONGODB_URI
 

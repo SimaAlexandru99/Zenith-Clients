@@ -3,18 +3,22 @@
 "use client"
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
-import { BookOpen, Bot, ChevronsUpDown, Frame, GalleryVerticalEnd, Map, PieChart, Plus, Settings2, SquareTerminal } from "lucide-react"
+import {
+  BookOpen,
+  Bot,
+  ChevronsUpDown,
+  Frame,
+  GalleryVerticalEnd,
+  Map,
+  PieChart,
+  Plus,
+  Settings2,
+  SquareTerminal,
+} from "lucide-react"
 import * as React from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { Button } from "components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,12 +29,7 @@ import {
 } from "components/ui/dropdown-menu"
 import { Label } from "components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "components/ui/select"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "components/ui/sidebar"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "components/ui/sidebar"
 import { auth, db } from "lib/firebase"
 
 type Team = {
@@ -160,8 +159,7 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
   }
 
   // Determine if the user is an admin in any team or has no teams
-  const canAddTeam =
-    Object.values(userRoles).some((role) => role === "admin") || teams.length === 0
+  const canAddTeam = Object.values(userRoles).some((role) => role === "admin") || teams.length === 0
 
   return (
     <SidebarMenu>
@@ -172,13 +170,11 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex items-center justify-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Plus className="size-4" />
               </div>
-              <div className="grid flex-1 text-sm leading-tight text-left">
-                <span className="font-semibold truncate">
-                  {selectedTeam ? selectedTeam.name : "Select a team"}
-                </span>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{selectedTeam ? selectedTeam.name : "Select a team"}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -189,24 +185,16 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-zinc-500 dark:text-zinc-400">
-              Teams
-            </DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-zinc-500 dark:text-zinc-400">Teams</DropdownMenuLabel>
             {teams.length > 0 ? (
               teams.map((team) => (
-                <DropdownMenuItem
-                  key={team.id}
-                  onClick={() => setSelectedTeam(team)}
-                  className="gap-2 p-2"
-                >
-                  <div className="flex items-center justify-center border rounded-sm size-6">
+                <DropdownMenuItem key={team.id} onClick={() => setSelectedTeam(team)} className="gap-2 p-2">
+                  <div className="flex size-6 items-center justify-center rounded-sm border">
                     <team.logo className="size-4 shrink-0" />
                   </div>
                   {team.name}
                   {/* Optionally, indicate if the user is an admin */}
-                  {userRoles[team.id] === "admin" && (
-                    <span className="ml-auto text-xs text-green-500">Admin</span>
-                  )}
+                  {userRoles[team.id] === "admin" && <span className="ml-auto text-xs text-green-500">Admin</span>}
                 </DropdownMenuItem>
               ))
             ) : (
@@ -217,11 +205,8 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
             <DropdownMenuSeparator />
             {/* Only show "Add Team" option if the user is an admin in at least one team or has no teams */}
             {canAddTeam && (
-              <DropdownMenuItem
-                className="gap-2 p-2 cursor-pointer"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                <div className="flex items-center justify-center bg-white border rounded-md size-6 border-zinc-200 dark:border-zinc-800 dark:bg-zinc-950">
+              <DropdownMenuItem className="cursor-pointer gap-2 p-2" onClick={() => setIsDialogOpen(true)}>
+                <div className="flex size-6 items-center justify-center rounded-md border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
                   <Plus className="size-4" />
                 </div>
                 <div className="font-medium text-zinc-500 dark:text-zinc-400">Add Team</div>
@@ -235,11 +220,9 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add a New Team</DialogTitle>
-              <DialogDescription>
-                Fill in the details to create a new team.
-              </DialogDescription>
+              <DialogDescription>Fill in the details to create a new team.</DialogDescription>
             </DialogHeader>
-            <div className="py-4 space-y-4">
+            <div className="space-y-4 py-4">
               <div>
                 <Label htmlFor="team-name" className="text-sm">
                   Team Name
@@ -249,7 +232,7 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
                   type="text"
                   value={newTeamName}
                   onChange={(e) => setNewTeamName(e.target.value)}
-                  className="w-full p-2 mt-1 border rounded-md"
+                  className="mt-1 w-full rounded-md border p-2"
                   placeholder="Enter team name"
                 />
               </div>
@@ -285,26 +268,15 @@ export function TeamSwitcher({ teams, userRoles }: TeamSwitcherProps) {
                   </SelectContent>
                 </Select>
               </div>
-              {addTeamError && (
-                <div className="text-sm text-red-500">{addTeamError}</div>
-              )}
+              {addTeamError && <div className="text-sm text-red-500">{addTeamError}</div>}
             </div>
             <DialogFooter>
-              <Button
-                onClick={() => setIsDialogOpen(false)}
-                variant="outline"
-                disabled={isAddingTeam}
-              >
+              <Button onClick={() => setIsDialogOpen(false)} variant="outline" disabled={isAddingTeam}>
                 Cancel
               </Button>
               <Button
                 onClick={handleAddTeam}
-                disabled={
-                  isAddingTeam ||
-                  !newTeamName.trim() ||
-                  !newTeamLogo.trim() ||
-                  !newTeamPlan.trim()
-                }
+                disabled={isAddingTeam || !newTeamName.trim() || !newTeamLogo.trim() || !newTeamPlan.trim()}
               >
                 {isAddingTeam ? "Adding..." : "Add Team"}
               </Button>
