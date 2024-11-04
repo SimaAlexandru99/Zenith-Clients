@@ -156,7 +156,6 @@ export async function GET(request: Request) {
       ])
       .toArray()
 
-    console.log("Average Q4.5 Per Campaign:", averageQ4_5PerCampaign) // Debugging log
 
     return NextResponse.json(averageQ4_5PerCampaign)
   } catch (error) {

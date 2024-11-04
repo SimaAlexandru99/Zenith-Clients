@@ -229,21 +229,6 @@ export default function UTDatabaseContent() {
         )}
 
       </div>
-
-      {/* Presentation section */}
-      <div className="p-4 mt-8 rounded-lg bg-muted">
-        <p className="text-sm text-muted-foreground">
-          În cadrul acestei prezentări veți regăsi o analiză cu privire la satisfacția clienților CEC Bank, analiza
-          desfășurată în perioada anului 2024 în colaborare cu Optima Solutions Services, în care am analizat
-          următoarele aspecte:
-        </p>
-        <ul className="mt-4 space-y-2 text-sm list-disc list-inside text-muted-foreground">
-          <li>Studierea și colectarea motivelor pentru care clienții aleg această bancă.</li>
-          <li>Gradul de rezolvare a problemelor pentru care clienții au ales serviciile CEC Bank.</li>
-          <li>Evaluarea interacțiunii pe care clientul a avut-o în cadrul unităților CEC Bank.</li>
-          <li>Aspecte de îmbunătățit în relația cu clienții.</li>
-        </ul>
-      </div>
     </div>
   )
 }
