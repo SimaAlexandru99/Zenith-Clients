@@ -1,5 +1,7 @@
+// /components/UTDatabaseContent.tsx
+
 import { CheckCircle, Users, XCircle } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useMemo } from "react"
 import BottomAgency from "components/custom/Charts/BottomAgency"
 import TopAgency from "components/custom/Charts/TopAgency"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
@@ -7,6 +9,7 @@ import { Skeleton } from "components/ui/skeleton"
 import { useToast } from "hooks/use-toast"
 import Q43AnalysisChart from "../Charts/Q43AnalysisChart"
 import Q44AnalysisChart from "../Charts/Q44AnalysisChart"
+import Q45AnalysisChart from "../Charts/Q45AnalysisChart" // Import the new component
 
 interface GenderData {
   gender: string
@@ -38,6 +41,12 @@ interface Q4_4Data {
   totalResponses: number
 }
 
+interface Q4_5Data {
+  campania: string
+  averageQ4_5: number | null
+  totalResponses: number
+}
+
 interface CardData {
   title: string
   value: string | number
@@ -53,6 +62,7 @@ export default function UTDatabaseContent() {
   const [surveyData, setSurveyData] = useState<SurveyData>({ completeSurveys: 0, incompleteSurveys: 0 })
   const [q4_3Data, setQ4_3Data] = useState<Q4_3Data[]>([])
   const [q4_4Data, setQ4_4Data] = useState<Q4_4Data[]>([])
+  const [q4_5Data, setQ4_5Data] = useState<Q4_5Data[]>([]) // New state for Q4.5
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
@@ -61,15 +71,23 @@ export default function UTDatabaseContent() {
     setIsLoading(true)
     setError(null)
     try {
-      const [genderResponse, surveyResponse, agencyResponse, q4_3Response, q4_4Response] = await Promise.all([
+      const [genderResponse, surveyResponse, agencyResponse, q4_3Response, q4_4Response, q4_5Response] = await Promise.all([
         fetch(`/api/gender-data?db=UT_database`),
         fetch(`/api/survey-status?db=UT_database`),
         fetch(`/api/agency-performance?db=UT_database`),
         fetch(`/api/q4_3-analysis?db=UT_database`),
         fetch(`/api/q4_4-analysis?db=UT_database`),
+        fetch(`/api/q4_5-analysis?db=UT_database`), // Fetch Q4.5 data
       ])
 
-      if (!genderResponse.ok || !surveyResponse.ok || !agencyResponse.ok || !q4_3Response.ok || !q4_4Response.ok) {
+      if (
+        !genderResponse.ok ||
+        !surveyResponse.ok ||
+        !agencyResponse.ok ||
+        !q4_3Response.ok ||
+        !q4_4Response.ok ||
+        !q4_5Response.ok
+      ) {
         throw new Error("Failed to fetch data")
       }
 
@@ -78,12 +96,14 @@ export default function UTDatabaseContent() {
       const fetchedAgencyData: AgencyData[] = (await agencyResponse.json()) as AgencyData[]
       const fetchedQ4_3Data: Q4_3Data[] = (await q4_3Response.json()) as Q4_3Data[]
       const fetchedQ4_4Data: Q4_4Data[] = (await q4_4Response.json()) as Q4_4Data[]
+      const fetchedQ4_5Data: Q4_5Data[] = (await q4_5Response.json()) as Q4_5Data[] // Parse Q4.5 data
 
       setGenderData(fetchedGenderData)
       setSurveyData(fetchedSurveyData)
       setAgencyData(fetchedAgencyData)
       setQ4_3Data(fetchedQ4_3Data)
       setQ4_4Data(fetchedQ4_4Data)
+      setQ4_5Data(fetchedQ4_5Data) // Update state
 
       toast({
         title: "Data loaded successfully",
@@ -112,7 +132,7 @@ export default function UTDatabaseContent() {
   }, [fetchData])
 
   if (error) {
-    return <div>An error occurred: {error}</div>
+    return <div className="text-red-500">A apărut o eroare: {error}</div>
   }
 
   const masculinCount = genderData.find((item) => item.gender === "Masculin")?.count || 0
@@ -195,23 +215,52 @@ export default function UTDatabaseContent() {
           />
         )}
       </div>
+
+      {/* Q4.5 Analysis Chart */}
+      <div className="mt-8">
+        {q4_5Data.length > 0 && (
+          <Q45AnalysisChart
+            q45Data={q4_5Data.map(({ campania, averageQ4_5, totalResponses }) => ({
+              campania,
+              averageQ4_5: averageQ4_5 ?? 0, // Default to 0 if null
+              totalResponses,
+            }))}
+          />
+        )}
+
+      </div>
+
+      {/* Presentation section */}
+      <div className="p-4 mt-8 rounded-lg bg-muted">
+        <p className="text-sm text-muted-foreground">
+          În cadrul acestei prezentări veți regăsi o analiză cu privire la satisfacția clienților CEC Bank, analiza
+          desfășurată în perioada anului 2024 în colaborare cu Optima Solutions Services, în care am analizat
+          următoarele aspecte:
+        </p>
+        <ul className="mt-4 space-y-2 text-sm list-disc list-inside text-muted-foreground">
+          <li>Studierea și colectarea motivelor pentru care clienții aleg această bancă.</li>
+          <li>Gradul de rezolvare a problemelor pentru care clienții au ales serviciile CEC Bank.</li>
+          <li>Evaluarea interacțiunii pe care clientul a avut-o în cadrul unităților CEC Bank.</li>
+          <li>Aspecte de îmbunătățit în relația cu clienții.</li>
+        </ul>
+      </div>
     </div>
   )
 }
 
 function DataCard({ title, value, icon: Icon, description, isLoading }: CardData & { isLoading: boolean }) {
   return (
-    <Card className="rounded-lg shadow-lg transition-transform hover:scale-105">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="transition-transform rounded-lg shadow-lg hover:scale-105">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="size-6 text-muted-foreground" />
+        <Icon className="w-6 h-6 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          {isLoading ? <Skeleton className="mb-2 h-6 w-16 animate-pulse" /> : value}
+          {isLoading ? <Skeleton className="w-16 h-6 mb-2 animate-pulse" /> : value}
         </div>
         <p className="text-xs text-muted-foreground">
-          {isLoading ? <Skeleton className="h-4 w-full animate-pulse" /> : description}
+          {isLoading ? <Skeleton className="w-full h-4 animate-pulse" /> : description}
         </p>
       </CardContent>
     </Card>

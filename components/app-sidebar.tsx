@@ -1,10 +1,10 @@
 "use client"
 
-import { Command, Home, Map, PieChart, SquareTerminal, Users } from "lucide-react"
+import { Home, Map, PieChart, SquareTerminal, Users } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
-
+import Image from "next/image"
 import { NavMain } from "components/nav-main"
 import { NavUser } from "components/nav-user"
 import {
@@ -50,6 +50,7 @@ const data = {
       title: "Analitice",
       url: "/analitice",
       icon: PieChart, // Ensure LineChart icon is imported
+      isActive: true,
       items: [
         { title: "Analiza UT", url: "/analitice/ut-dashboard", icon: Map },
         { title: "Analiza CC", url: "/analitice/cc-dashboard", icon: SquareTerminal },
@@ -67,12 +68,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Optima Solutions Services</span>
-                  <span className="truncate text-xs">Analitice</span>
+                <Image
+                  src="/logo.png" // Asigură-te că imaginea există în public/images/logo.png
+                  alt="Optima Solutions Services Logo"
+                  width={40} // Ajustează dimensiunea după necesități
+                  height={40}
+                />
+                <div className="grid flex-1 text-sm leading-tight text-left">
+                  <span className="font-semibold truncate">Optima Solutions Services</span>
+                  <span className="text-xs truncate">Analitice</span>
                 </div>
               </Link>
             </SidebarMenuButton>

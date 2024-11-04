@@ -1,4 +1,7 @@
-"use client"
+// components/LoginForm.tsx
+
+'use client'
+
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -14,8 +17,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState("")
   const router = useRouter()
 
-  const [user] = useAuthState(auth)
-  const [signInWithEmailAndPassword, , loading, error] = useSignInWithEmailAndPassword(auth)
+  const [user, loadingUser, userError] = useAuthState(auth)
+  const [signInWithEmailAndPassword, userCredential, loadingSignIn, signInError] = useSignInWithEmailAndPassword(auth)
 
   const checkUserRole = useCallback(
     async (uid: string) => {
@@ -55,8 +58,8 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div>
-        <h1 className="text-center text-3xl font-bold">Login</h1>
-        <p className="mt-2 text-center text-sm">Enter your email below to login to your account</p>
+        <h1 className="text-3xl font-bold text-center">Autentificare</h1>
+        <p className="mt-2 text-sm text-center">Introduceți adresa de email și parola pentru a vă autentifica în contul dumneavoastră</p>
       </div>
       <form onSubmit={handleEmailSignIn} className="mt-8 space-y-6">
         <div>
@@ -66,20 +69,24 @@ export default function LoginForm() {
           <Input
             id="email"
             type="email"
-            placeholder="m@example.com"
+            placeholder="exemplu@domeniu.com"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1"
+            aria-describedby="email-description"
           />
+          <p id="email-description" className="text-xs text-gray-500">
+            Introduceți adresa de email asociată contului dumneavoastră.
+          </p>
         </div>
         <div>
           <div className="flex items-center justify-between">
             <Label htmlFor="password" className="block text-sm font-medium">
-              Password
+              Parolă
             </Label>
             <Link href="/forgot-password" className="text-sm font-medium text-primary hover:underline">
-              Forgot your password?
+              Ați uitat parola?
             </Link>
           </div>
           <Input
@@ -89,19 +96,21 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1"
+            aria-describedby="password-description"
           />
+          <p id="password-description" className="text-xs text-gray-500">
+            Introduceți parola asociată contului dumneavoastră.
+          </p>
         </div>
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        <Button type="submit" className="w-full" disabled={loadingSignIn}>
+          {loadingSignIn ? "Autentificare în curs..." : "Autentificare"}
         </Button>
       </form>
-      {error && <p className="mt-4 text-center text-sm text-red-500">{error?.message}</p>}
-      <p className="mt-6 text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="font-medium text-primary hover:underline">
-          Sign up
-        </Link>
-      </p>
+      {(signInError || userError) && (
+        <p className="mt-4 text-sm text-center text-red-500">
+          {signInError?.message || userError?.message}
+        </p>
+      )}
     </div>
   )
 }
