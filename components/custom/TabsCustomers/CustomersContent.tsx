@@ -16,6 +16,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "components/ui/pagination"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "components/ui/alert-dialog"
 import { Skeleton } from "components/ui/skeleton"
 import { TableCell, TableRow } from "components/ui/table"
 import { Customer } from "types/customer"
@@ -169,19 +180,19 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
     return Array.from({ length: itemsPerPage }).map((_, index) => (
       <TableRow key={index} className="animate-pulse">
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-24" />
+          <Skeleton className="w-24 h-6" />
         </TableCell>
       </TableRow>
     ))
@@ -211,9 +222,9 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
   return (
     <>
       {/* Search Bar Outside the Card */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute text-gray-400 -translate-y-1/2 left-3 top-1/2" />
           <Input
             type="text"
             placeholder="Caută client..."
@@ -253,27 +264,22 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
           )}
 
           {/* Delete Confirmation Dialog */}
-          <Dialog
-            open={!!deleteCustomerId}
-            onOpenChange={(open) => {
-              if (!open) setDeleteCustomerId(null)
-            }}
-          >
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirmare Ștergere</DialogTitle>
-                <p>Ești sigur că dorești să ștergi acest client?</p>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="secondary" onClick={() => setDeleteCustomerId(null)}>
-                  Anulează
-                </Button>
-                <Button variant="destructive" onClick={confirmDelete}>
-                  Șterge
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <AlertDialog open={!!deleteCustomerId} onOpenChange={(open) => {
+            if (!open) setDeleteCustomerId(null)
+          }}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Confirmare Ștergere</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Ești sigur că dorești să ștergi acest client?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setDeleteCustomerId(null)}>Anulează</AlertDialogCancel>
+                <AlertDialogAction onClick={confirmDelete}>Șterge</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {/* Error Message */}
           {error && !isLoading && <div className="mt-4 text-center text-red-500">Eroare: {error}</div>}
