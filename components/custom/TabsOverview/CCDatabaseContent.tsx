@@ -1,18 +1,12 @@
+// /components/CCDatabaseContent.tsx
+
 "use client"
 
-import { CheckCircle, LucideIcon, Users, XCircle } from "lucide-react"
-import { useEffect, useState } from "react"
+import { CheckCircle, XCircle } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
-
-interface GenderData {
-  gender: string
-  count: number
-}
-
-interface AgencyData {
-  _id: string
-  averageRating: number
-}
+import { Skeleton } from "components/ui/skeleton"
+import { useToast } from "hooks/use-toast"
 
 interface SurveyData {
   completeSurveys: number
@@ -22,67 +16,65 @@ interface SurveyData {
 interface CardData {
   title: string
   value: string | number
-  icon: LucideIcon
+  icon: React.ComponentType<any>
   description: string
 }
 
 export default function CCDatabaseContent() {
-  const [genderData, setGenderData] = useState<GenderData[]>([])
-  const [, setAgencyData] = useState<AgencyData[]>([])
   const [surveyData, setSurveyData] = useState<SurveyData>({ completeSurveys: 0, incompleteSurveys: 0 })
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
+
+  const fetchData = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const surveyResponse = await fetch(`/api/survey-status?db=CC_database`)
+
+      if (!surveyResponse.ok) {
+        throw new Error("Failed to fetch survey data")
+      }
+
+      const fetchedSurveyData: SurveyData = (await surveyResponse.json()) as SurveyData
+
+      console.log("Fetched Survey Data:", fetchedSurveyData)
+
+      setSurveyData(fetchedSurveyData)
+
+      toast({
+        title: "Data loaded successfully",
+        description: "The latest survey data has been fetched from the server.",
+        variant: "default",
+      })
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred"
+      toast({
+        title: "Error loading data",
+        description: errorMessage,
+        variant: "destructive",
+      })
+      setError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [toast])
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        const [genderResponse, agencyResponse] = await Promise.all([
-          fetch(`/api/gender-data?db=CC_database`),
-          fetch(`/api/survey-status?db=CC_database`),
-        ])
-
-        if (!genderResponse.ok || !agencyResponse.ok) {
-          throw new Error("Failed to fetch data")
-        }
-
-        const genderData: GenderData[] = (await genderResponse.json()) as GenderData[]
-        const agencyData: AgencyData[] = (await agencyResponse.json()) as AgencyData[]
-
-        setGenderData(genderData)
-        setAgencyData(agencyData)
-        setSurveyData(surveyData)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
     fetchData()
-  }, [surveyData])
+    // Optionally, set up polling similar to UTDatabaseContent
+    const POLLING_INTERVAL = 300000 // 5 minutes
+    const intervalId = setInterval(() => {
+      fetchData()
+    }, POLLING_INTERVAL)
+    return () => clearInterval(intervalId)
+  }, [fetchData])
 
   if (error) {
-    return <div>An error occurred: {error}</div>
+    return <div className="text-red-500">A apărut o eroare: {error}</div>
   }
 
-  const masculinCount = genderData.find((item) => item.gender === "Masculin")?.count || 0
-  const femininCount = genderData.find((item) => item.gender === "Feminin")?.count || 0
-
   const cardData: CardData[] = [
-    {
-      title: "Total Clienți Masculini",
-      value: isLoading ? "Loading..." : masculinCount,
-      icon: Users,
-      description: "Clienți bărbați în baza de date CC",
-    },
-    {
-      title: "Total Clienți Femini",
-      value: isLoading ? "Loading..." : femininCount,
-      icon: Users,
-      description: "Clienți femei în baza de date CC",
-    },
     {
       title: "Sondaj Complet",
       value: isLoading ? "Loading..." : surveyData.completeSurveys,
@@ -99,25 +91,33 @@ export default function CCDatabaseContent() {
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         {cardData.map((card, index) => (
-          <DataCard key={index} {...card} />
+          <DataCard key={index} {...card} isLoading={isLoading} />
         ))}
       </div>
     </div>
   )
 }
 
-function DataCard({ title, value, icon: Icon, description }: CardData) {
+interface DataCardProps extends CardData {
+  isLoading: boolean
+}
+
+function DataCard({ title, value, icon: Icon, description, isLoading }: DataCardProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="transition-transform rounded-lg shadow-lg hover:scale-105">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="size-4 text-muted-foreground" />
+        <Icon className="size-6 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <div className="text-2xl font-bold">
+          {isLoading ? <Skeleton className="w-16 h-6 mb-2 animate-pulse" /> : value}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {isLoading ? <Skeleton className="w-full h-4 animate-pulse" /> : description}
+        </p>
       </CardContent>
     </Card>
   )

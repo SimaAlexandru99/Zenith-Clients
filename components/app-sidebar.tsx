@@ -1,10 +1,10 @@
 "use client"
 
 import { Home, Map, PieChart, SquareTerminal, Users } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
-import Image from "next/image"
 import { NavMain } from "components/nav-main"
 import { NavUser } from "components/nav-user"
 import {
@@ -74,9 +74,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   width={40} // Ajustează dimensiunea după necesități
                   height={40}
                 />
-                <div className="grid flex-1 text-sm leading-tight text-left">
-                  <span className="font-semibold truncate">Optima Solutions Services</span>
-                  <span className="text-xs truncate">Analitice</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Optima Solutions Services</span>
+                  <span className="truncate text-xs">Analitice</span>
                 </div>
               </Link>
             </SidebarMenuButton>

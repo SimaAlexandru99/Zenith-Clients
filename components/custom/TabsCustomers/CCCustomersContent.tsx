@@ -5,8 +5,8 @@
 import React from "react"
 import CustomersContent from "./CustomersContent"
 
-const UTCustomersContent = (): JSX.Element => {
-  return <CustomersContent dbName="UT_database" apiEndpoint="/api/clienti" />
+const CCCustomersContent = (): JSX.Element => {
+  return <CustomersContent dbName="CC_database" apiEndpoint="/api/clienti" />
 }
 
-export default UTCustomersContent
+export default CCCustomersContent

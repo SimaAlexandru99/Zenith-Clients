@@ -24,7 +24,7 @@ const CustomersTable = ({
       <Table className="min-w-full">
         <TableHeader>
           <TableRow>
-            {["ID Client", "Telefon", "Cod agentie", "Status"].map((header) => (
+            {["ID Client", "Telefon", "Status"].map((header) => (
               <TableHead
                 key={header}
                 onClick={() => onSort(header as keyof Customer)}
@@ -74,7 +74,6 @@ const CustomersTable = ({
               <TableRow key={customer._id} className="hover:bg-gray-100">
                 <TableCell>{customer["ID Client"]}</TableCell>
                 <TableCell>{customer.Telefon}</TableCell>
-                <TableCell>{customer["Cod agentie"]}</TableCell>
                 <TableCell>
                   <span
                     className={`rounded-full px-2 py-1 text-xs ${
@@ -95,7 +94,7 @@ const CustomersTable = ({
                       <TooltipTrigger asChild>
                         <Link href={`/clienti/${customer._id}`}>
                           <Button size="sm" variant="ghost" className="p-2" aria-label="Vezi detalii">
-                            <Eye className="size-5 text-blue-500" />
+                            <Eye className="text-blue-500 size-5" />
                           </Button>
                         </Link>
                       </TooltipTrigger>

@@ -1,6 +1,6 @@
 // components/LoginForm.tsx
 
-'use client'
+"use client"
 
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import Link from "next/link"
@@ -17,8 +17,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState("")
   const router = useRouter()
 
-  const [user, loadingUser, userError] = useAuthState(auth)
-  const [signInWithEmailAndPassword, userCredential, loadingSignIn, signInError] = useSignInWithEmailAndPassword(auth)
+  const [user, , userError] = useAuthState(auth)
+  const [signInWithEmailAndPassword, , loadingSignIn, signInError] = useSignInWithEmailAndPassword(auth)
 
   const checkUserRole = useCallback(
     async (uid: string) => {
@@ -58,8 +58,10 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-center">Autentificare</h1>
-        <p className="mt-2 text-sm text-center">Introduceți adresa de email și parola pentru a vă autentifica în contul dumneavoastră</p>
+        <h1 className="text-center text-3xl font-bold">Autentificare</h1>
+        <p className="mt-2 text-center text-sm">
+          Introduceți adresa de email și parola pentru a vă autentifica în contul dumneavoastră
+        </p>
       </div>
       <form onSubmit={handleEmailSignIn} className="mt-8 space-y-6">
         <div>
@@ -107,9 +109,7 @@ export default function LoginForm() {
         </Button>
       </form>
       {(signInError || userError) && (
-        <p className="mt-4 text-sm text-center text-red-500">
-          {signInError?.message || userError?.message}
-        </p>
+        <p className="mt-4 text-center text-sm text-red-500">{signInError?.message || userError?.message}</p>
       )}
     </div>
   )

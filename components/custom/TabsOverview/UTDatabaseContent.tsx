@@ -1,7 +1,7 @@
 // /components/UTDatabaseContent.tsx
 
 import { CheckCircle, Users, XCircle } from "lucide-react"
-import { useCallback, useEffect, useState, useMemo } from "react"
+import { useCallback, useEffect, useState } from "react"
 import BottomAgency from "components/custom/Charts/BottomAgency"
 import TopAgency from "components/custom/Charts/TopAgency"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
@@ -71,14 +71,15 @@ export default function UTDatabaseContent() {
     setIsLoading(true)
     setError(null)
     try {
-      const [genderResponse, surveyResponse, agencyResponse, q4_3Response, q4_4Response, q4_5Response] = await Promise.all([
-        fetch(`/api/gender-data?db=UT_database`),
-        fetch(`/api/survey-status?db=UT_database`),
-        fetch(`/api/agency-performance?db=UT_database`),
-        fetch(`/api/q4_3-analysis?db=UT_database`),
-        fetch(`/api/q4_4-analysis?db=UT_database`),
-        fetch(`/api/q4_5-analysis?db=UT_database`), // Fetch Q4.5 data
-      ])
+      const [genderResponse, surveyResponse, agencyResponse, q4_3Response, q4_4Response, q4_5Response] =
+        await Promise.all([
+          fetch(`/api/gender-data?db=UT_database`),
+          fetch(`/api/survey-status?db=UT_database`),
+          fetch(`/api/agency-performance?db=UT_database`),
+          fetch(`/api/q4_3-analysis?db=UT_database`),
+          fetch(`/api/q4_4-analysis?db=UT_database`),
+          fetch(`/api/q4_5-analysis?db=UT_database`), // Fetch Q4.5 data
+        ])
 
       if (
         !genderResponse.ok ||
@@ -227,7 +228,6 @@ export default function UTDatabaseContent() {
             }))}
           />
         )}
-
       </div>
     </div>
   )
@@ -235,17 +235,17 @@ export default function UTDatabaseContent() {
 
 function DataCard({ title, value, icon: Icon, description, isLoading }: CardData & { isLoading: boolean }) {
   return (
-    <Card className="transition-transform rounded-lg shadow-lg hover:scale-105">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+    <Card className="rounded-lg shadow-lg transition-transform hover:scale-105">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="w-6 h-6 text-muted-foreground" />
+        <Icon className="size-6 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          {isLoading ? <Skeleton className="w-16 h-6 mb-2 animate-pulse" /> : value}
+          {isLoading ? <Skeleton className="mb-2 h-6 w-16 animate-pulse" /> : value}
         </div>
         <p className="text-xs text-muted-foreground">
-          {isLoading ? <Skeleton className="w-full h-4 animate-pulse" /> : description}
+          {isLoading ? <Skeleton className="h-4 w-full animate-pulse" /> : description}
         </p>
       </CardContent>
     </Card>

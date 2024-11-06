@@ -6,12 +6,15 @@ const uri = env.MONGODB_URI
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const { searchParams } = new URL(request.url)
-  const dbName = searchParams.get("db") || "UT_database"
+  const dbName = searchParams.get("db")
 
   const client = new MongoClient(uri)
 
   try {
     await client.connect()
+    if (!dbName) {
+      return NextResponse.json({ error: "Database name is required" }, { status: 400 })
+    }
     const db = client.db(dbName)
     const collection = db.collection("sc_si_collection")
 

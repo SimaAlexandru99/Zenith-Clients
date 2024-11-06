@@ -24,21 +24,28 @@ export async function generateMetadata({ params }: CustomerPageProps): Promise<M
 async function fetchCustomer(id: string): Promise<Customer | null> {
   try {
     const apiUrl = env.NEXT_PUBLIC_API_URL || ""
-    // Dacă NEXT_PUBLIC_API_URL este definit, folosește-l; altfel, folosește URL-ul relativ
-    const url = apiUrl ? `${apiUrl}/api/clienti/${id}?db=UT_database` : `/api/clienti/${id}?db=UT_database`
-    const res = await fetch(url, {
-      cache: "no-store",
-    })
-    if (!res.ok) {
-      console.error(`Eroare la obținerea clientului: ${res.status} ${res.statusText}`)
-      return null
+    const databases = ["UT_database", "CC_database"]
+
+    for (const db of databases) {
+      const url = apiUrl ? `${apiUrl}/api/clienti/${id}?db=${db}` : `/api/clienti/${id}?db=${db}`
+      const res = await fetch(url, {
+        cache: "no-store",
+      })
+
+      if (res.ok) {
+        return (await res.json()) as Customer
+      }
+
+      console.warn(`Client not found in ${db}: ${res.status} ${res.statusText}`)
     }
-    return (await res.json()) as Customer
+
+    return null
   } catch (error) {
-    console.error("Eroare la obținerea clientului:", error)
+    console.error("Error fetching customer:", error)
     return null
   }
 }
+
 
 export default async function CustomerPage({ params }: CustomerPageProps): Promise<JSX.Element> {
   const customer = await fetchCustomer(params.id)

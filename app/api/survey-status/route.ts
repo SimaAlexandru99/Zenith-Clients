@@ -37,6 +37,7 @@ export async function GET(request: Request) {
     // Count surveys where the Status is exactly "Sondaj incomplet"
     const incompleteSurveys = await collection.countDocuments({ Status: "Sondaj incomplet" })
 
+
     return NextResponse.json({ completeSurveys, incompleteSurveys })
   } catch (error) {
     console.error("Error fetching survey data:", error)

@@ -1,15 +1,5 @@
 import React, { useMemo } from "react"
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  LabelList,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card"
 import { ChartConfig, ChartContainer } from "components/ui/chart"
 
@@ -64,8 +54,8 @@ export default function Q45AnalysisChart({ q45Data }: Q45AnalysisChartProps) {
 
   const maxAverage = useMemo(() => {
     const validAverages = chartData
-      .filter(item => item.averageQ4_5 !== null)
-      .map(item => item.averageQ4_5 as number)
+      .filter((item) => item.averageQ4_5 !== null)
+      .map((item) => item.averageQ4_5 as number)
     return validAverages.length > 0 ? Math.ceil(Math.max(...validAverages)) : 10 // Default max if no data
   }, [chartData])
 
@@ -77,11 +67,7 @@ export default function Q45AnalysisChart({ q45Data }: Q45AnalysisChartProps) {
       <CardContent>
         <ChartContainer config={chartConfig} aria-label="Bar chart showing average Q4.5 analysis by campaign">
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={chartData}
-              layout="vertical"
-              margin={{ left: 20, right: 40, top: 20, bottom: 20 }}
-            >
+            <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 40, top: 20, bottom: 20 }}>
               <CartesianGrid horizontal={false} />
               <YAxis
                 dataKey="campania"
@@ -98,11 +84,11 @@ export default function Q45AnalysisChart({ q45Data }: Q45AnalysisChartProps) {
                   if (active && payload && payload.length > 0) {
                     const data = payload[0]?.payload
                     return (
-                      <div className="p-2 border rounded shadow-lg bg-background">
+                      <div className="rounded border bg-background p-2 shadow-lg">
                         <div className="flex items-center">
                           <span
                             style={{ backgroundColor: data.color }}
-                            className="inline-block w-2 h-2 mr-2 rounded-full"
+                            className="mr-2 inline-block size-2 rounded-full"
                           ></span>
                           <strong>{data.campania}</strong>
                         </div>

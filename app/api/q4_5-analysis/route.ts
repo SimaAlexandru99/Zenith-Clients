@@ -156,7 +156,6 @@ export async function GET(request: Request) {
       ])
       .toArray()
 
-
     return NextResponse.json(averageQ4_5PerCampaign)
   } catch (error) {
     console.error("Error fetching Q4.5 data:", error)
