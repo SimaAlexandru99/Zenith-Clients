@@ -1,8 +1,7 @@
 import { format } from "date-fns"
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
-import { Separator } from "components/ui/separator"
 import { Badge } from "components/ui/badge"
-import { Customer, isUTCustomer, isCCCustomer } from "types/customer"
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
+import { Customer, isCCCustomer, isUTCustomer } from "types/customer"
 
 interface CustomerDetailsProps {
   customer: Customer

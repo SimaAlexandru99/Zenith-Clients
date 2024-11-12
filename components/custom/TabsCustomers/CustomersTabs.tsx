@@ -1,14 +1,14 @@
 // components/CustomersTabs.tsx
 "use client"
 
-import { ArrowRight, Users, UserCheck, HeadphonesIcon } from "lucide-react"
+import { ArrowRight, HeadphonesIcon, UserCheck, Users } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { Card, CardContent } from "components/ui/card"
 import { Separator } from "components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs"
 import CCCustomersContent from "./CCCustomersContent"
 import UTCustomersContent from "./UTCustomersContent"
-import { Card, CardContent } from "components/ui/card"
 
 type DatabaseType = "UT_database" | "CC_database"
 
@@ -46,17 +46,17 @@ function CustomersTabs() {
   const currentDb = databaseInfo[selectedDb]
 
   return (
-    <div className="space-y-8 p-6 md:p-8 lg:p-12">
+    <div className="p-6 space-y-8 md:p-8 lg:p-12">
       {/* Top section with navigation and heading */}
       <div className="space-y-4">
         {/* Navigation link */}
         <Link
           href="/clienti"
-          className="group inline-flex items-center text-sm font-medium text-muted-foreground transition hover:text-foreground"
+          className="inline-flex items-center text-sm font-medium transition group text-muted-foreground hover:text-foreground"
           aria-label="Go back to customers overview"
         >
           <Users className="size-4" />
-          <Separator className="mx-2 h-4 w-px shrink-0 bg-border" />
+          <Separator className="w-px h-4 mx-2 shrink-0 bg-border" />
           <span className="underline-offset-4 group-hover:underline">
             Află mai multe despre clienții {currentDb.shortTitle}
           </span>
@@ -75,7 +75,7 @@ function CustomersTabs() {
 
       {/* Database selection tabs */}
       <Tabs defaultValue="UT_database" onValueChange={(value) => setSelectedDb(value as DatabaseType)}>
-        <TabsList className="mb-4 h-10">
+        <TabsList className="h-10 mb-4">
           <TabsTrigger value="UT_database" className="flex items-center gap-2" aria-label="Select UT Customer Database">
             <UserCheck className="size-4" />
             Baza de date UT
@@ -116,7 +116,7 @@ function CustomersTabs() {
         <Card>
           <CardContent className="p-4">
             <h3 className="mb-3 font-semibold">Obiective analiză</h3>
-            <ul className="list-inside list-disc space-y-2 text-sm text-muted-foreground">
+            <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
               <li>Analiză demografică și comportamente client</li>
               <li>Evaluarea satisfacției și feedback-ului</li>
               <li>Identificarea oportunităților de îmbunătățire</li>

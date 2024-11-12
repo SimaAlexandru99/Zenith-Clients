@@ -3,9 +3,17 @@
 import debounce from "lodash.debounce"
 import { Search } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Button } from "components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "components/ui/alert-dialog"
 import { Card, CardContent } from "components/ui/card"
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog"
 import { Input } from "components/ui/input"
 import {
   Pagination,
@@ -16,17 +24,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "components/ui/pagination"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "components/ui/alert-dialog"
 import { Skeleton } from "components/ui/skeleton"
 import { TableCell, TableRow } from "components/ui/table"
 import { Customer } from "types/customer"
@@ -180,19 +177,19 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
     return Array.from({ length: itemsPerPage }).map((_, index) => (
       <TableRow key={index} className="animate-pulse">
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-full" />
+          <Skeleton className="w-full h-6" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-6 w-24" />
+          <Skeleton className="w-24 h-6" />
         </TableCell>
       </TableRow>
     ))
@@ -222,9 +219,9 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
   return (
     <>
       {/* Search Bar Outside the Card */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute text-gray-400 -translate-y-1/2 left-3 top-1/2" />
           <Input
             type="text"
             placeholder="Caută client..."
