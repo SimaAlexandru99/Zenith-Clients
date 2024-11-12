@@ -41,10 +41,11 @@ export function GenderPieChart({ data, isLoading, dbName }: GenderPieChartProps)
   const totalCalls = React.useMemo(() => data.reduce((acc, curr) => acc + curr.count, 0), [data])
 
   const coloredData = React.useMemo(
-    () => data.map((item) => ({
-      ...item,
-      fill: chartConfig[item.gender as keyof typeof chartConfig]?.color || chartConfig.Clienti.color,
-    })),
+    () =>
+      data.map((item) => ({
+        ...item,
+        fill: chartConfig[item.gender as keyof typeof chartConfig]?.color || chartConfig.Clienti.color,
+      })),
     [data]
   )
 
@@ -57,7 +58,7 @@ export function GenderPieChart({ data, isLoading, dbName }: GenderPieChartProps)
       <CardContent className="flex-1 pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
           {isLoading ? (
-            <div className="flex items-center justify-center size-full">
+            <div className="flex size-full items-center justify-center">
               <Skeleton className="size-[200px] rounded-full" />
             </div>
           ) : (
@@ -73,16 +74,18 @@ export function GenderPieChart({ data, isLoading, dbName }: GenderPieChartProps)
                 stroke="hsl(var(--background))"
               >
                 <Label
-                  content={({ viewBox }) => viewBox && "cx" in viewBox && "cy" in viewBox ? (
-                    <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                      <tspan x={viewBox.cx} y={viewBox.cy} className="text-2xl font-bold fill-foreground">
-                        {totalCalls.toLocaleString()}
-                      </tspan>
-                      <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 20} className="text-xs fill-muted-foreground">
-                        Total Apeluri
-                      </tspan>
-                    </text>
-                  ) : null}
+                  content={({ viewBox }) =>
+                    viewBox && "cx" in viewBox && "cy" in viewBox ? (
+                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                        <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-2xl font-bold">
+                          {totalCalls.toLocaleString()}
+                        </tspan>
+                        <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 20} className="fill-muted-foreground text-xs">
+                          Total Apeluri
+                        </tspan>
+                      </text>
+                    ) : null
+                  }
                 />
               </Pie>
             </PieChart>
@@ -90,14 +93,14 @@ export function GenderPieChart({ data, isLoading, dbName }: GenderPieChartProps)
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 pt-2">
-        <div className="flex justify-center w-full gap-4">
+        <div className="flex w-full justify-center gap-4">
           {coloredData.map((item) => (
             <div key={item.gender} className="flex items-center gap-2">
-              <div className="rounded-full size-3" style={{ backgroundColor: item.fill }} />
+              <div className="size-3 rounded-full" style={{ backgroundColor: item.fill }} />
               <span className="text-sm font-medium">{item.gender}</span>
               <span className="text-sm text-muted-foreground">
                 {isLoading ? (
-                  <Skeleton className="w-8 h-4" />
+                  <Skeleton className="h-4 w-8" />
                 ) : (
                   `${item.count.toLocaleString()} (${((item.count / totalCalls) * 100).toFixed(1)}%)`
                 )}
@@ -105,7 +108,7 @@ export function GenderPieChart({ data, isLoading, dbName }: GenderPieChartProps)
             </div>
           ))}
         </div>
-        <div className="text-xs text-center text-muted-foreground">Afișarea distribuției pe gen pentru {dbName}</div>
+        <div className="text-center text-xs text-muted-foreground">Afișarea distribuției pe gen pentru {dbName}</div>
       </CardFooter>
     </Card>
   )

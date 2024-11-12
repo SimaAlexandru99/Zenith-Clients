@@ -106,17 +106,17 @@ interface DataCardProps extends CardData {
 
 function DataCard({ title, value, icon: Icon, description, isLoading }: DataCardProps) {
   return (
-    <Card className="transition-transform rounded-lg shadow-lg hover:scale-105">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+    <Card className="rounded-lg shadow-lg transition-transform hover:scale-105">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className="size-6 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          {isLoading ? <Skeleton className="w-16 h-6 mb-2 animate-pulse" /> : value}
+          {isLoading ? <Skeleton className="mb-2 h-6 w-16 animate-pulse" /> : value}
         </div>
         <p className="text-xs text-muted-foreground">
-          {isLoading ? <Skeleton className="w-full h-4 animate-pulse" /> : description}
+          {isLoading ? <Skeleton className="h-4 w-full animate-pulse" /> : description}
         </p>
       </CardContent>
     </Card>

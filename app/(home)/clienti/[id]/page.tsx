@@ -46,7 +46,6 @@ async function fetchCustomer(id: string): Promise<Customer | null> {
   }
 }
 
-
 export default async function CustomerPage({ params }: CustomerPageProps): Promise<JSX.Element> {
   const customer = await fetchCustomer(params.id)
 

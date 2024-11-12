@@ -74,9 +74,7 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Informații de bază
-            <Badge variant={customer.Status === "Sondaj complet" ? "default" : "secondary"}>
-              {customer.Status}
-            </Badge>
+            <Badge variant={customer.Status === "Sondaj complet" ? "default" : "secondary"}>{customer.Status}</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -90,10 +88,7 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
             {isUTCustomer(customer) && (
               <>
                 <QuestionAnswer question="Cod Agenție" answer={customer["Cod agentie"]} />
-                <QuestionAnswer
-                  question="Medie Agenție"
-                  answer={customer["Medie agentie"]?.toFixed(2)}
-                />
+                <QuestionAnswer question="Medie Agenție" answer={customer["Medie agentie"]?.toFixed(2)} />
               </>
             )}
           </dl>
@@ -114,11 +109,19 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
             <dl className="grid grid-cols-1 gap-4">
               <QuestionAnswer
                 question="Motivul vizitei"
-                answer={customer["T4. Motivul pentru care ati fost in unitatea CEC Bank a fost acela de a ………………. ? [citeste descrierea din baza de date]"]}
+                answer={
+                  customer[
+                    "T4. Motivul pentru care ati fost in unitatea CEC Bank a fost acela de a ………………. ? [citeste descrierea din baza de date]"
+                  ]
+                }
               />
               <QuestionAnswer
                 question="Ușurința procesului"
-                answer={customer["Q1. Va voi citi cateva intrebari si variante de raspuns, cu rugamintea de a alege raspunsul care vi se potriveste cel mai bine. Cat de usor a fost sa …………….. ? [citeste descrierea din baza de date] Ati putea sa oferiti o nota pe o scala de la 1 la 5, unde 1 inseamna foarte greu, iar 5 foarte usor?"]}
+                answer={
+                  customer[
+                    "Q1. Va voi citi cateva intrebari si variante de raspuns, cu rugamintea de a alege raspunsul care vi se potriveste cel mai bine. Cat de usor a fost sa …………….. ? [citeste descrierea din baza de date] Ati putea sa oferiti o nota pe o scala de la 1 la 5, unde 1 inseamna foarte greu, iar 5 foarte usor?"
+                  ]
+                }
                 isRating
               />
             </dl>
@@ -141,7 +144,11 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
               />
               <QuestionAnswer
                 question="Mod de contact"
-                answer={customer["T2.1. Ati apelat unul din numerele de telefon de pe spatele cardului? Sau ati apelat unul din numerele de telefon de pe site-ul bancii? Cum ati procedat?"]}
+                answer={
+                  customer[
+                    "T2.1. Ati apelat unul din numerele de telefon de pe spatele cardului? Sau ati apelat unul din numerele de telefon de pe site-ul bancii? Cum ati procedat?"
+                  ]
+                }
               />
             </dl>
           </CardContent>
@@ -202,12 +209,20 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
             <dl className="grid grid-cols-1 gap-4">
               <QuestionAnswer
                 question="Satisfacție timp de așteptare"
-                answer={customer["Q1 In ceea ce priveste timpul cat ati asteptat din momentul in care ati sunat la Serviciul Call Center si pana cand v-a raspuns un coleg de-al nostru, cat de multumit ati fost? Va rog sa oferiti o nota pe o scala 1-5 unde 1 inseamna foarte nemultumit, iar 5 foarte multumit"]}
+                answer={
+                  customer[
+                    "Q1 In ceea ce priveste timpul cat ati asteptat din momentul in care ati sunat la Serviciul Call Center si pana cand v-a raspuns un coleg de-al nostru, cat de multumit ati fost? Va rog sa oferiti o nota pe o scala 1-5 unde 1 inseamna foarte nemultumit, iar 5 foarte multumit"
+                  ]
+                }
                 isRating
               />
               <QuestionAnswer
                 question="Navigare meniu"
-                answer={customer["Q2.1 Cat de usor a fost sa gasiti in meniul robotului telefonic optiunea potrivita pentru a vorbi cu un operator?"]}
+                answer={
+                  customer[
+                    "Q2.1 Cat de usor a fost sa gasiti in meniul robotului telefonic optiunea potrivita pentru a vorbi cu un operator?"
+                  ]
+                }
                 isRating
               />
               <QuestionAnswer
@@ -217,7 +232,11 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
               />
               <QuestionAnswer
                 question="Calitatea informațiilor"
-                answer={customer["Q3.1.4 V-a oferit informatiile corecte si complete privind solicitarea in legatura cu care ati sunat;"]}
+                answer={
+                  customer[
+                    "Q3.1.4 V-a oferit informatiile corecte si complete privind solicitarea in legatura cu care ati sunat;"
+                  ]
+                }
                 isRating
               />
               <QuestionAnswer
@@ -279,7 +298,11 @@ function CustomerDetails({ customer }: CustomerDetailsProps) {
               <QuestionAnswer
                 className="col-span-full"
                 question="Este CEC Bank banca principală?"
-                answer={customer["QA Este CEC Bank banca dumneavoastra principala? Banca la care aveti cele mai multe produse sau la care faceti cele mai multe tranzactii?"]}
+                answer={
+                  customer[
+                    "QA Este CEC Bank banca dumneavoastra principala? Banca la care aveti cele mai multe produse sau la care faceti cele mai multe tranzactii?"
+                  ]
+                }
               />
             </dl>
           </CardContent>

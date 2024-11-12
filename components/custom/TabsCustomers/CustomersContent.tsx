@@ -180,19 +180,19 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
     return Array.from({ length: itemsPerPage }).map((_, index) => (
       <TableRow key={index} className="animate-pulse">
         <TableCell>
-          <Skeleton className="w-full h-6" />
+          <Skeleton className="h-6 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="w-full h-6" />
+          <Skeleton className="h-6 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="w-full h-6" />
+          <Skeleton className="h-6 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="w-full h-6" />
+          <Skeleton className="h-6 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="w-24 h-6" />
+          <Skeleton className="h-6 w-24" />
         </TableCell>
       </TableRow>
     ))
@@ -222,9 +222,9 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
   return (
     <>
       {/* Search Bar Outside the Card */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div className="relative w-full max-w-md">
-          <Search className="absolute text-gray-400 -translate-y-1/2 left-3 top-1/2" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <Input
             type="text"
             placeholder="Caută client..."
@@ -264,15 +264,16 @@ const CustomersContent = ({ dbName, apiEndpoint }: CustomersContentProps): JSX.E
           )}
 
           {/* Delete Confirmation Dialog */}
-          <AlertDialog open={!!deleteCustomerId} onOpenChange={(open) => {
-            if (!open) setDeleteCustomerId(null)
-          }}>
+          <AlertDialog
+            open={!!deleteCustomerId}
+            onOpenChange={(open) => {
+              if (!open) setDeleteCustomerId(null)
+            }}
+          >
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirmare Ștergere</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Ești sigur că dorești să ștergi acest client?
-                </AlertDialogDescription>
+                <AlertDialogDescription>Ești sigur că dorești să ștergi acest client?</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setDeleteCustomerId(null)}>Anulează</AlertDialogCancel>

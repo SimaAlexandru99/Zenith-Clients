@@ -94,7 +94,7 @@ const CustomersTable = ({
                       <TooltipTrigger asChild>
                         <Link href={`/clienti/${customer._id}`}>
                           <Button size="sm" variant="ghost" className="p-2" aria-label="Vezi detalii">
-                            <Eye className="text-blue-500 size-5" />
+                            <Eye className="size-5 text-blue-500" />
                           </Button>
                         </Link>
                       </TooltipTrigger>

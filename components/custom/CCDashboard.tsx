@@ -75,11 +75,7 @@ export function CCDashboard() {
   return (
     <div className="grid w-full gap-4">
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-        {isLoading ? (
-          <SkeletonChart />
-        ) : (
-          <GenderPieChart data={genderData} isLoading={false} dbName="CC Database" />
-        )}
+        {isLoading ? <SkeletonChart /> : <GenderPieChart data={genderData} isLoading={false} dbName="CC Database" />}
       </div>
     </div>
   )
